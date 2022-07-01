@@ -1,0 +1,5438 @@
+My Documentation For Laravel  :   (  https://laravel.com/docs ) 
+----------------------------
+
+
+
+
+
+
+    (1) simple Install and tools 
+    --------------------------------------
+        download "cmder" and then install "composer" 
+        for create project use this Command in cmder 
+        ==> composer create-project --prefer-dist laravel/laravel blog
+        "--prefer-dist" this is optional and mean to path and if you in path dont use it
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (2) Run Project 
+    -------------------------
+        use this Command to run project ===> php artisan serve
+        to change port  ===> php artisan serve --port=8001
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (3) Routes 
+    --------------------------------------
+        ==> Routes is URL in laravel , there is many types in routes 
+            Route::get($uri, $callback);
+            Route::post($uri, $callback);
+            Route::put($uri, $callback);
+            Route::patch($uri, $callback);
+            Route::delete($uri, $callback);
+            Route::options($uri, $callback);
+
+        ==> Sometimes you may need to register a route that responds to multiple HTTP verbs
+            Route::match(['get', 'post'], '/', function () {
+                //
+            });
+            Route::any('/', function () {
+                //
+            });
+
+        ==> Route::get($uri, $callback); use to normal move with links
+        Route::get('/ahmed', function () {
+            return view("ahmed") ;
+        });
+
+        ==> Route::post($uri, $callback); use to recieved data from forms 
+        Route::post('/ali', function () {
+            return view('ali');
+        });
+        any page go to ali.blade.php must have form to direct to it
+
+        ==> Route::put($uri, $callback); use to update data 
+        <form action="/foo/bar" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="text" name="name" placeholder="username">
+            <input type="submit" value="Click Here">
+        </form>
+        OR
+        <form action="/foo/bar" method="POST">
+            @method('PUT')
+            <input type="text" name="name" placeholder="username">
+            <input type="submit" value="Click Here">
+        </form>
+
+        ==> Route::delete($uri, $callback); use to delete data and usage the same put 
+
+        ==> Route::patch($uri, $callback); use to delete data and usage the same put 
+
+        ==> Route::any($uri, $callback); use to be ( post , patch , delete ) 
+
+        ==> we can set name for route for use it in blade file 
+
+        Ex ==> 
+        Route::get('users/{id}', function () {
+            return view("users") ;
+        }) -> name("a");
+
+        and in blade file 
+
+        <a href="{{ route("a" , 55 ) }}"> Click Here </a>
+
+
+        ==> 
+        // resource mean all crud methods ( index , show ,create , store , edit , update , destroy )
+        Route::resource("posts","Postcontroller")->except("create" , "edit" , "show");
+        // use this command to know all routes ==>
+        ==> php artisan route:list
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (4) dynamic routs   
+    --------------------------------------
+
+        ==> www.example.com/users/2
+            Route::get('user/{id}', function () {   // id require
+                return view("ahmed") ;
+            });
+
+        Ex ==>
+        Route::get('user/{id?}', function ( $ident = null ) { // $ident = null because if is not there {$id}
+            return "hello user number " . $ident ;
+        });
+
+        Route::get('user/{id?}/{username?}', function ( $ident = null ) { 
+            return "hello user number " . $ident ;
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (5) regular expression with routes   
+    --------------------------------------
+
+    Route::get('user/{id?}', function ( $ident = null ) { 
+        return "hello user number " . $ident ;
+    })->where("id" , "[0-9]+");
+
+    Route::get('user/{id?}/{username}', function ( ) { 
+        return "hello user number " ;
+    })->where( "id" => "[0-9]+" , "username" => "[A-Za-z]+" );
+
+    OR we can apply all regular expression with routes with 
+
+    Route::pattern("id" , "[0-9]+");
+    Route::pattern( "id" => "[0-9]+" , "username" => "[a-z]+" );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (6) route stracute & route service provider   
+    -----------------------------------------
+
+        to more organize my code we must create such file route for every thing
+        1 - create colne of web.php in routes
+        2 - rename in to EX-> ( admin.php )
+        3 - go to namespace App\Providers\RouteServiceProvider;
+        4 - in public function map() colne  $this->mapWebRoutes() ===> $this->mapAdminRoutes()
+        5 - colne protected function mapWebRoutes()
+            ex ==>
+            protected function mapAdminRoutes()
+            {
+                Route::namespace($this->namespace)
+                    ->group(base_path('routes/admin.php'));
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (7) route for  namespace    
+    -----------------------------------------
+        
+        Route::namespace("admin")->group( function (){
+            // mean that any route here must be in ( namespace App\Http\Controllers\admin )   
+            Route::get('admin', "AdminController@sayHi");
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (8) route for prefix    
+    -----------------------------------------
+                
+        Route::prefix("user")->group( function (){
+            
+            // to shortCut links user/edit , user/delete     
+            Route::get('/edit', function (){
+                return "Edit page" ;
+            });
+            
+            Route::get('/delete', function (){
+                return "delete page" ;
+            });
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (10) route for group    
+    -----------------------------------------
+        Route::group( [ "prefix"=>"admin", "namespace"=>"admin", "middleware" => "auth" ] , function (){
+            Route::get('edit', "AdminController@editInfo" );
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (11) route resource    
+    -----------------------------------------
+        to create resource controller use this Command
+        ==> php artisan make:controller UserController --resource
+        // OR
+        ==> php artisan make:controller UserController -r
+        then 
+        Route::resource('user', 'UserController');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (12) create controller   
+    --------------------------------------
+        use this Command to ===> php artisan make:controller Users 
+        to create CRUD controller ===> php artisan make:controller Users -r
+        !!Note that controller name first charchters must be Capital 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (13) passing data from controller to view     
+    --------------------------------------
+        1 - passing data with [ with() function ] 
+        ---------------------------------------------
+            ==> in controller file 
+            Route::get('/', function () {
+                return view('home')->with("name" , "AbdullRahman");
+                OR                
+                return view('home')->with( [ "name" => "AbdullRahman" , "age" => "23" ] );
+            });
+            ==> in blade file 
+            <h3> {{ $name }} </h3>
+        
+
+        2- passing data as array 
+        ---------------------------
+            ==> in controller file 
+            Route::get('/', function () {
+                $data = [] ;
+                $data["name"] = "AbdullRahman";
+                $data["age"] = "23";
+                OR 
+                $data = [ "name" => "AbdullRahman" , "age" => "23" ]
+                return view('home' , $data );
+            });
+            ==> in blade file 
+            <h3> {{ $name }} </h3>
+            <h3> {{ $age }} </h3>
+
+
+        3- passing data as object 
+        -------------------------------
+            ==> in controller file 
+            Route::get('/', function () {
+
+                $obj = new \stdClass();
+                $obj-> name = "AbdullRahman";
+                $obj-> age = "23";
+                return view('home' , compact("obj") );
+                
+            });
+            ==> in blade file 
+            <h3> {{ $obj -> name }} </h3>
+            <h3> {{ $obj -> age }} </h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (14) passing data from route (web.php) to Controller     
+    --------------------------------------------------------
+
+        ==> in (web.php) file 
+            Route::get("product/{id}" , "controllerName@method");
+
+
+        ==> in controller file 
+            public function show($id){
+                return $id ;  
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (15) view in laravel
+    --------------------------------------
+        we use this function to call blade file
+        ==> view("front.users") ; 
+        and put ss , js , imgs folders in public folder 
+        to go to public folder for css , js , imgs folders use {{ URL::asset("file.min.css") }}
+        
+   
+
+
+
+
+
+
+        
+   
+
+
+
+
+
+        
+   
+
+
+
+
+
+
+
+
+
+
+
+
+    (16) CSRF Protection    
+    -----------------------------------------
+        for protected form hackers 
+        <form method="POST" action="/profile">
+            @csrf
+            ...
+        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (16) Send vars from controller to blade    
+    -----------------------------------------
+
+        - use array 
+        --------------
+            $projects = Project::get();
+            return view('admin.projects' ,  ['projects' => $projects] ); // we use it when want to change vars names
+
+
+
+        - use php func compact 
+        ------------------------
+            $projects = Project::get();
+            return view('admin.projects' , compact('projects') );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (17) translate in laravel ( mcamara Package  )    
+    --------------------------------------  
+        visit URL ( https://github.com/mcamara/laravel-localization )
+
+        1- for install package use this command ==>
+            composer require mcamara/laravel-localization
+
+        2- to create Config Files use this command ==> 
+            php artisan vendor:publish --provider="Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider"
+
+        3- After that, config/laravellocalization.php will be created , you can add 
+           new lang by remove comment from lang line then create folder of this lang in resources/lang
+
+        4- Register Middleware You may register the package middleware
+           in the app/Http/Kernel.php and this code ==> 
+            protected $routeMiddleware = [
+                /**** Mcamara localization ****/
+                'localize'                => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
+                'localizationRedirect'    => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
+                'localeSessionRedirect'   => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
+                'localeCookieRedirect'    => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
+                'localeViewPath'          => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class
+            ];
+
+        5-  create blade file for test and put navbar and buttons to change lang
+
+        6- in web.php       
+            Route::group(['prefix' => LaravelLocalization::setLocale() ,'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath' ] ], function()
+                
+                Route::get('/test', function () {
+                    return view('test');
+                });
+
+            });
+
+        7-  some codes in mcamara
+            {{ LaravelLocalization::getCurrentLocaleName() }}      ==> (English/Spanish/Arabic/ ..etc)
+            {{ LaravelLocalization::getCurrentLocale() }}          ==> key of the current locale (en/sp/ar/ ..etc)
+            {{ LaravelLocalization::getCurrentLocaleDirection() }} ==> direction as string (ltr/rtl)
+
+        8-  create loop in blade file to get all Langs
+            <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="=" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        {{ LaravelLocalization::getCurrentLocaleName() }}   <span class="caret"></span>
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                            <a class="dropdown-item" rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                {{ $properties['native'] }}
+                            </a>
+                        @endforeach
+                    </div>
+                </li>
+        
+        9-  create folders with shortcut of langs("ar , fr , en ") and each folder must contain same files
+        
+        10- in blade file use {{ __("message.Hello") }} OR {{ trans("message.Hello") }} 
+
+
+        
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+        
+        
+    (18) view inheritance & layouts & extends
+    -------------------------------------------
+        first create master blade file and put my code on it 
+        then call this balde file in anoter blade usung
+        @extends('layout.master') 
+        for adding code in master using in
+        @section('content') 
+            <h1 class="text-center">Contact page</h1>
+        @endsection 
+        then put in main included balde file ==> @yield('content')
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+                
+    (19) directive
+    -------------------------------------------
+        1- if and else in laravel
+        ----------------------------
+            @if ( $name == "AbdullRahman" )
+                ok you are AbdullRahman
+            @elseif ( $name == "Ahmed" )
+                ok you are Ahmed
+            @else
+                you are not AbdullRahman
+            @endif
+
+        2- foreach in laravel 
+        ------------------------
+            @foreach ($player->list as $member)
+                {{ $member->player_name }}
+            @endforeach
+
+        3 - forelse  
+        ------------------------
+            it use if data may be empty 
+
+            @forelse ($player->list as $member)
+                {{ $member->player_name }}
+            @empty
+                data is empty
+            @endforelse
+
+        4- if visitor guest or auth 
+        ----------------------------
+
+            @auth('admin')
+                <li>Dashboard</li>
+                <li>Log out</li>
+            @endauth
+            @auth('web')
+                <li>Create Post</li>
+                <li>Log out</li>
+            @endauth
+            @guest
+                <li>Contact</li>
+                <li>About us</li>
+            @endauth
+
+            //OR
+            
+            @guest
+                <li>Login</li>
+                <li>Contact</li>
+                <li>About us</li>
+            @else
+                <li>Contact</li>
+                <li>About us</li>
+            @endauth
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (20) Comment in laravel
+    ----------------------------------------
+        comment in blade file 
+        {{-- Type Comment Here --}}
+
+   
+       
+
+        
+        
+   
+       
+
+        
+        
+        
+        
+        
+        
+        
+   
+       
+
+        
+        
+        
+        
+   
+       
+
+        
+        
+           
+
+    (21) create orginal Auth 
+    --------------------------------------
+        1- composer require laravel/ui:v2.4.1     // setup vue , react ,  bootstrap in project
+        2- php artisan ui vue --auth              // create auth with vue components { bootstrap , vue , react }  
+        3- npm install && npm run dev             // setup & download node_modules for js framwork
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (21) defaultStringLength Error 
+    --------------------------------------
+
+        - Error limit string  => SQLSTATE[42000]: Syntax error or access violation: 1071 Specified
+            key was too long max key length is 767 bytes
+        Solve in  namespace ==> App\Providers  ==> AppServiceProvider.php;
+
+        use Illuminate\Support\Facades\Schema;
+        public function boot()
+        {
+            Schema::defaultStringLength(191);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    (22) Email vertification 
+    --------------------------------------
+        1-  for test serve go to ( https://mailtrap.io ) and create an account
+        
+        2-  use Username , Password from ( https://mailtrap.io ) and add this in .env file
+        
+        3-  go to Model Users.php and edit class to ==>
+            ( Class User extends Authenticatable implements MustVerifyEmail )
+        
+        4-  go to route web.php and edit 
+            Auth::routes() ==> Auth::routes(["verify" => true ])   // for confirm that must go to mail and verify account 
+        
+        5-  edit route to ==> Route::get('/home', 'HomeController@index')->name('home') ->middleware("verified");
+        
+        6-  if try will give an Exception ( Cannot send message without a sender address )
+            so we must put an email to send from in .env file ( MAIL_FROM_ADDRESS=null ) 
+        
+        7-  give same error must use Command ==> composer dump-autoload // for any edit in connection
+        
+        8-  for edit in message go to routes/auth/verify.blade.php 
+            and after reset password will good
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+    (23) Custom Register/SignUp in Laravel 
+    --------------------------------------
+        1-  create migration of colmuns ==>
+                $table->string('username')->unique();
+                $table->string('mobile')->unique();
+
+        2-  in Model User.php add new DB colmuns in $fillable ==>
+                protected $fillable = [
+                    'username', 'email', 'password', "mobile"
+                ];
+
+        3-  in Controller RegisterController.php in 
+                edit Validator ==> 
+                protected function validator(array $data)
+                {
+                    return Validator::make($data, [
+                        'username' => ['required', 'string', 'max:255' , 'unique:users'],
+                        'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                        "mobile"   => ['required', 'numeric' , 'min:8', 'unique:users' ],
+                        'password' => ['required', 'string', 'min:8', 'confirmed'],
+                    ]);  
+                }
+                and for insert in DB ==>
+                protected function create(array $data)
+                {
+                    return User::create([
+                        'username' => $data['username'],
+                        'email'    => $data['email'],
+                        'mobile'   => $data['mobile'],
+                        'password' => Hash::make($data['password']),
+                    ]);
+                }
+
+        4-  in register.blade.php edit in register form and add fields
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+    (24) Custom Login with (Mobile) 
+    --------------------------------------
+        1- for example if i want to login with mobile , password 
+        2- we must have mobile , password in db to auth 
+        3- replace email feild with mobile feild in login route , then add in Users model in 
+        4-  protected $fillable = [
+                'name', 'email', "mobile" , 'password',
+            ];
+        5-  to modify in login opration go to  namespace App\Http\Controllers\Auth ==> LoginController.php;
+        add this function 
+        public function username(){
+            return "mobile" ;
+        }
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+    (25) Login with Username Or Email / Mobile Or Email
+    -------------------------------------------------------
+        1- in  login.blade.php edit input email and convert it with name="identify"
+
+        2-  to modify in login opration go to  namespace App\Http\Controllers\Auth ==> LoginController.php;
+                add this function 
+                public function username(){
+        
+                    $value = request() -> input("identify") ;
+                    
+                    $type = filter_var($value , FILTER_VALIDATE_EMAIL ) ? "email" : "username" ;
+
+                    request() -> merge([$type => $value]);  // for check row  in DB  merge([ "email" => "abdoesmail3gmail.com" ])  
+                                                               
+                    return $type ;
+
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+                
+    (26) Login with Githup  ( Socialite Package )
+    -----------------------------------------------
+
+        ( Socialite Package ) ==> https://laravel.com/docs/7.x/socialite
+
+        1-  we must download package laravel socialite 
+            so use this command ==> composer require laravel/socialite
+
+        2- to active package laravel socialite we must go to folder config/app.php
+            and add in ( aliases )    'Socialite' => Laravel\Socialite\Facades\Socialite::class ,
+            and add in ( providers )  Laravel\Socialite\SocialiteServiceProvider::class ,
+
+        3-  login in best way need real domain not( localhost OR http://127.0.0.1:8000 ) so you must create fake domain
+                1-  move project folder in xampp/htdocs 
+                2-  go to C:\xampp\apache\conf\extra ==> file ( httpd-vhosts.conf ) 
+                    add this code ==>
+                    
+                    <VirtualHost *:80>
+                        DocumentRoot "C:\xampp\htdocs\laravelblog\public"
+                        ServerName laravelblog.com
+                    </VirtualHost>
+                    <VirtualHost *:80>
+                        DocumentRoot "C:\xampp\htdocs"
+                        ServerName localhost
+                    </VirtualHost>
+                3-  go to C:\Windows\System32\drivers\etc ==> file ( hosts ) 
+                    Add this code ==>
+
+                    = localhost name resolution is handled within DNS itself.
+                    =      127.0.0.1       localhost
+                    =      ::1             localhost
+
+                    127.0.0.1		localhost
+                    127.0.0.1		laravelblog.com
+
+                4- restart xampp programm
+
+        4-  visit site ==>  https://github.com/settings/developers , and create New OAuth App 
+            name                        ==> laravelstore
+            Homepage URL                ==> http://laravelstore.com
+            Authorization callback URL  ==> http://laravelstore.com/login/github/callback
+            use Client ID , Client Secret
+
+        5- in config/services.php
+            'github' => [
+                'client_id'     => env('GITHUB_CLIENT_ID'),
+                'client_secret' => env('GITHUB_CLIENT_SECRET'),
+                'redirect'      => env('GITHUB_REDIRECT_LINK'),
+            ],
+
+        6-  put Client ID, Client Secret in .env file 
+            GITHUB_CLIENT_ID     = 44f3e79d334ca150b0a1
+            GITHUB_CLIENT_SECRET = 5b5546fff4c9e0c89603938311bc19b9b1fc415c
+            GITHUB_REDIRECT_LINK = http://laravelstore.com/login/github/callback
+
+        7-  go to Login blade and create button Login with github
+            <a href="{{url("login/github")}}" > Login With github </a>
+
+        8- in Routes web.php
+            Route::group( [ "prefix"=>"login" , "namespace" => "Auth" ] , function (){
+
+                Route::get('{website}', 'SocialLoginController@redirectToProvider');
+                Route::get('{website}/callback', 'SocialLoginController@handleProviderCallback');
+
+            });
+
+        9-  create controller " SocialLoginController " to put all social site in it
+            put this code in controller ==>
+
+            public function redirectToProvider( $website )
+            {
+                return Socialite::driver($website)->redirect();
+            }
+
+            public function handleProviderCallback($website)
+            {
+                $user = Socialite::driver($website)->stateless()->user();
+                return $user->getName() ;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+                
+    (27) Login with Goolge  ( Socialite Package )
+    -----------------------------------------------
+
+        ( Socialite Package ) ==> https://laravel.com/docs/7.x/socialite
+
+        1-  we must download package laravel socialite 
+            so use this command ==> composer require laravel/socialite
+
+        2-  to active package laravel socialite we must go to folder config/app.php
+            and add in ( aliases )    'Socialite' => Laravel\Socialite\Facades\Socialite::class ,
+            and add in ( providers )  Laravel\Socialite\SocialiteServiceProvider::class ,
+
+        3- login in best way need real domain not( localhost OR http://127.0.0.1:8000 )
+                1- move project folder in xampp/htdocs 
+                2- go to C:\xampp\apache\conf\extra ==> file ( httpd-vhosts.conf ) 
+                    add this code ==>
+                    <VirtualHost *:80>
+                        DocumentRoot "C:\xampp\htdocs\laravelstore\public"
+                        ServerName laravelstore.com
+                    </VirtualHost>
+                3- go to C:\Windows\System32\drivers\etc ==> file ( hosts ) 
+                    add this code ==>
+                    = localhost name resolution is handled within DNS itself.
+                        127.0.0.1       localhost
+                        ::1             localhost
+
+                    127.0.0.1		laravelstore.com
+                4- restart xampp programm
+
+        4- visit site ==> https://console.developers.google.com/ 
+            1- after create project and put project name , terms , privacy
+            2- in left silder ==> Credentials ==>  then click CREATE CREDENTIALS ==> then Create OAuth client ID  
+            3- choose Application type ==> web application
+            4- Authorized JavaScript origins ==> http://laravelstore.com
+            5- Authorized redirect URIs      ==> http://laravelstore.com/login/googel/callback
+            6- Use Client ID , Client Secret
+                Client ID ==> 761862566658-1pk1r8938o6lmgc7nc0lbhffk2f4bpd8.apps.googleusercontent.com
+                Client Secret ==> SeXIXshIM2Lk0L7bop89_DCh
+        
+        5- in config/services.php
+            'google' => [
+                'client_id'     => env('GOOGLE_CLIENT_ID'),
+                'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+                'redirect'      => env('GOOGLE_REDIRECT_LINK'),
+            ],
+
+        6-  put Client ID, Client Secret in .env file 
+            GOOGLE_CLIENT_ID     = 761862566658-1pk1r8938o6lmgc7nc0lbhffk2f4bpd8.apps.googleusercontent.com
+            GOOGLE_CLIENT_SECRET = SeXIXshIM2Lk0L7bop89_DCh
+            GOOGLE_REDIRECT_LINK = http://laravelstore.com/login/github/callback
+
+        7-  go to Login blade and create button Login with github
+            <a href="{{url("login/google")}}" > Login With Goolge </a>
+
+        8- in Routes web.php
+            Route::group( [ "prefix"=>"login" , "namespace" => "Auth" ] , function (){
+                Route::get('{website}', 'SocialLoginController@redirectToProvider');
+                Route::get('{website}/callback', 'SocialLoginController@handleProviderCallback');
+            });
+        
+
+        9-  create controller " SocialLoginController " to put all social site in it
+            put this code in controller ==>
+
+            public function redirectToProvider( $website )
+            {
+                return Socialite::driver($website)->redirect();
+            }
+
+            public function handleProviderCallback($website)
+            {
+                $user = Socialite::driver($website)->stateless()->user();
+                return $user->getName() ;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+    (28) Login with Facebook  ( Socialite Package )
+    -----------------------------------------------
+        ( Socialite Package ) ==> https://laravel.com/docs/7.x/socialite
+
+        1-  we must download package laravel socialite 
+            so use this command ==> composer require laravel/socialite
+
+        
+        2-  to active package laravel socialite we must go to folder config/app.php
+            and add in ( aliases )    'Socialite' => Laravel\Socialite\Facades\Socialite::class ,
+            and add in ( providers )  Laravel\Socialite\SocialiteServiceProvider::class ,
+
+
+        3-  login in best way need real domain not( localhost OR http://127.0.0.1:8000 )
+                1- move project folder in xampp/htdocs 
+                2- go to C:\xampp\apache\conf\extra ==> file ( httpd-vhosts.conf ) 
+                    add this code ==>
+                    <VirtualHost *:80>
+                        DocumentRoot "C:\xampp\htdocs\laravelstore\public"
+                        ServerName laravelstore.com
+                    </VirtualHost>
+                3- go to C:\Windows\System32\drivers\etc ==> file ( hosts ) 
+                    add this code ==>
+                    = localhost name resolution is handled within DNS itself.
+                        127.0.0.1       localhost
+                        ::1             localhost
+
+
+                    127.0.0.1		laravelstore.com
+                4- restart xampp programm
+
+
+        4-  visit site ==> https://developers.facebook.com/apps
+                1- create project    //  laravelstore
+                2- go to facebook login and click set Up 
+                3- choose Web and change site URL then save and continue and click save   !!!!! Note For https://laravelstore.com !!!!!
+                4- go to left slider ( setting ==> basic ) and save ( App ID , App Secret )
+                6- go left slider and in Facebook Login ==> setting and put redirect link and !!!!! Note For https://laravelstore.com !!!!!
+                IN REAL DOMAIN ==>
+                // 7- Switch to Live Mode and choose category if in live real domain 
+                // 8- put privacy ( https://laravelstore.com/privacy OR https://www.termsfeed.com/privacy-policy/d629eaa65a329beb696ee6fae7fb13c6 ) and terms ( https://laravelstore.com/terms )
+
+        5- in config/services.php
+            'facebook' => [
+                'client_id' => env ( 'FACEBOOK_CLIENT_ID' ),
+                'client_secret' => env ( 'FACEBOOK_CLIENT_SECRET' ),
+                'redirect' => env ( 'FACEBOOK_REDIRECT_LINK' )
+            ],
+
+
+        6-  put Client ID, Client Secret in .env file 
+            FACEBOOK_CLIENT_ID     = 582762575706033
+            FACEBOOK_CLIENT_SECRET = e8d4416f6c3208e66af104892982efe5
+            FACEBOOK_REDIRECT_LINK = https://laravelstore.com/login/facebook/callback  !!!!! Note For https://laravelstore.com !!!!!
+
+
+        7-  go to Login blade and create button Login with github
+            <a href="{{url("login/facebook")}}" > Login With Facebook </a>
+
+
+        8- in Routes web.php
+            Route::group( [ "prefix"=>"login" , "namespace" => "Auth" ] , function (){
+                Route::get('{website}', 'SocialLoginController@redirectToProvider');
+                Route::get('{website}/callback', 'SocialLoginController@handleProviderCallback');
+            });
+        
+
+        9-  create controller " SocialLoginController " to put all social site in it
+            put this code in controller ==>
+
+            public function redirectToProvider( $website )
+            {
+                return Socialite::driver($website)->redirect();
+            }
+
+            public function handleProviderCallback($website)
+            {
+                $user = Socialite::driver($website)->stateless()->user();
+                return $user->getName() ;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+    (31) Laravel Model  
+    --------------------------------------
+        
+        1- model name must be Single name and first letter must be capital ( User.php , Product.php , Offer.php )  
+
+        2- create Model use this Command ==> php artisan make:model Product
+        
+        3- to create model with migration file use this Command ==> 
+            ==> php artisan make:model Product --migration
+            ==> php artisan make:model Product --migration
+
+        4- after make model we must organized folders so create folder ( Models ) 
+            and maove all models on it , then update ==> namespace App\Models;
+
+        5- if model have diffrent name about colmun in DB so we must recognise it in model
+            ==> protected $table = "my_products" ;  
+
+        6- if primary key column not named id 
+            ==> protected $primaryKey = 'product_id';
+
+        7-  if primary key column not (id) is not an integer 
+            ==> protected $keyType = 'string';
+
+        8-  to make SQL oprations create , read ,  edit , delete // be mass-assignable
+            ==> protected $fillable = [ "name" , "description" , "category" ] ; 
+            
+        9-  to stop SQL oprations create , read ,  edit , delete // not mass-assignable
+            ==> protected $guarded = ['name' , "desc"];  // you should use either $fillable or $guarded
+
+        10-  for hidden this colmuns from request when get
+            ==> protected $hidden = [ "created_at" , "updated_at" ] ;
+        
+        11- if you nedd to customize the names of the columns [ "created_at" , "updated_at" ]
+            ==> const CREATED_AT = 'creation_date';
+            ==> const UPDATED_AT = 'last_update';
+
+        12- for stop "created_at" , "updated_at" colmuns 
+            ==> public $timestamps = false ;  // true is default 
+
+        13- If you wish to use a non-incrementing or a non-numeric primary key (id)
+            ==> public $incrementing = false;  // true is default 
+
+        14- for change find(12) , with id to slug ==>
+            ================ Change id to Slug ================
+            public function getRouteKeyName(){
+                return "slug";
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (29) create model with migration file    
+    --------------------------------------
+        1-  create model use this Command ==> 
+            ==> php artisan make:model Offer   // not that model must be single
+
+        2-  create migration file use this Command ==> 
+            ==> php artisan make:migration create_offers_table // not offers 
+       
+        3-  create Model with migration file use this Command ==> 
+            ==> php artisan make:model Offer -m   // will create Model with single name and migration file  
+            ==> php artisan make:model Offer --migration  
+
+        4-  create Model with migration file with factory  use this Command ==> 
+            ==>  php artisan make:model Models/Offer -crms     //  c ==> controller , r ==> referance funcs in controller , m ==> migration , s ==> seeder   
+
+        5-  create Model with migration file with factory  use this Command ==> 
+            ==> php artisan make:model Models/Category -a     // a mean all model , controller with referance , migration , factory , seeder
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+    (30) Migration 
+    ----------------------------------------
+        1-  Command ==> php artisan make:migration create_products_table  // for create migrate file to create colmun in db
+            !! Note ==> table must be collection name (users , product , offers ....)
+                    ==> model must be Single name (User , Product , Offer ....) to compact with migration (table)
+
+        2-  Schema::create('products', function (Blueprint $table ) {
+                $table->id();
+                $table->char('name')->charset('utf8');
+                $table->string('name' , 200)->charset('utf8');
+                $table->integer('category_id');	
+                $table->timestamps();
+            });
+
+        3-  Run migration by Commands ==>
+            php artisan migrate   // create all tables
+            php artisan migrate:fresh  // fresh ==> Drop all tables and re-run all migrations
+
+        4- diffrent between default length of different types in Schema::table ==>
+            - String types
+            ---------------
+                CHAR ==> 1 to 191 (trailing spaces removed)
+                STRING ==> 1 to 16,300 (user defined)
+                TEXT ==> 1 to 65,535
+                MEDIUMTEXT ==> 1 to 16,777,215
+                LONGTEXT ==> 1 to 4,294,967,295
+            - Integer types
+            ---------------
+                TINYINT ==> 0 to 255 (unsigned) | -128 to 127 (signed)
+                SMALLINT ==> 0 to 65,535 (unsigned) | -32,768 to 32,767 (signed)
+                MEDIUMINT ==> 0 to 16,777,215 (unsigned) | -8,388,608 to 8,388,607 (signed)
+                INT ==> 0 to 4,294,967,295 (unsigned) | -2,147,483,648 to 2,147,483,647 (signed)
+                BIGINT ==> 0 to 18,446,744,073,709,551,615 (unsigned) | -9,223,372,036,854,775,808 to 9,223,372,036,854,775,807 (signed)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+    (32) Post form in Laravel    
+    --------------------------------------
+
+        1-  create blade 
+            <form method="POST" action="{{url("form")}}">
+                @csrf
+                <input type="text" name="name" class="form-control" placeholder="Product Name..">
+                <input type="text" name="description" class="form-control" placeholder="Description..">
+                <input type="text" name="category" class="form-control" placeholder="category">
+                <input type="submit" class="btn btn-primary">
+            </form> 
+
+        2-  in web.php put Routes
+            Route::get('form', "formController@form");
+            Route::post('data', "formController@data");
+ 
+        3-  in 
+            public function form(){
+                return view("test");  // blade file which has form code
+            }
+            public function save( Request $request ){
+                return $request ;                 // reguest will give all fields with json
+                return $request -> all() ;        // reguest will give all fields with json
+                return $request -> name ;         //  give value of name
+                return $request -> description ;  //  give value of description
+                return $request -> category ;     //  give value of category
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+         
+
+    (33) insert into DB with form  
+    --------------------------------------
+        
+        1-  create addProduct blade 
+            <form action="{{ url("products/store") }}" method="POST">
+                @csrf
+                <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Product Name.." />
+                @error('name')
+                    <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                @enderror
+                <br>
+                <input type="text" name="description" class="form-control" value="{{ old('description') }}" placeholder="Product Description.." />
+                @error('description')
+                    <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                @enderror
+                <br>
+                <input type="text" name="price" class="form-control" value="{{ old('price') }}" placeholder="Product Price.." />
+                @error('price')
+                    <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                @enderror
+                <br>
+                <input type="text" name="category" class="form-control" value="{{ old('category') }}" placeholder="Product Category.." />
+                @error('category')
+                    <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                @enderror
+                <br>
+                <input type="submit" class="btn btn-primary" />
+                <br>
+            </form>
+
+        2-  in web.php put Routes
+            Route::group( [ 'prefix' => 'products', "namespace" => "products" ] ,  function()
+            {
+                /* ========= Create ========= */
+                Route::get("create",'ProductController@create');
+                Route::post("store",'ProductController@store');
+
+            });
+
+        3-  create model Product.php with migration file in one line command ==> 
+            ===> php artisan make:model User -m
+            ===> php artisan make:model User --migration
+
+
+        4-  create product controller use this command ==> 
+            ===> php artisan make:controller ProductController -r 
+
+            use App\Models\Product;
+            ============================== Create ==============================
+            public function create()
+            {
+                return view("products.create") ;
+            }
+
+            public function store(ProductRequest $request)
+            {    
+                Product::create([   // Product mean model and 
+                    'name'        => $request -> name ,    // $request -> name ===> name field 
+                    'price'       => $request -> price , // $request -> description ===> description field
+                    'description' => $request -> description , // $request -> description ===> description field
+                    'category'    => $request -> category , // $request -> category ===> category field
+                ]);
+                //OR
+                $product = new Product;
+                $product->name        = $request -> name;
+                $product->price       = $request -> price;
+                $product->description = $request -> description;
+                $product->category    = $request -> category;
+                $product->save
+            }
+
+        ====================================================================================================   
+        ============================================== Insert Into DB With Ajax ============================================   
+        ====================================================================================================   
+
+        1- in blade file create <script> </script> and 
+            <div class="content">
+                <h1 class="text-center"> Create Product </h1>
+                <form  class="signup-form"  enctype="multipart/form-data">
+                    @csrf
+                    <input type="text" name="name" class="form-control" placeholder="Product Name.." />
+                    @error('name')
+                        <small class="form-text text-danger"> </small> 
+                    @enderror
+                    <br>
+                    <br>
+                    <input type="text" name="description" class="form-control" placeholder="Product Description.." />
+                    @error('description')
+                        <small class="form-text text-danger"> </small> 
+                    @enderror
+                    <br>
+                    <br>
+                    <input type="text" name="price" class="form-control" placeholder="Product Price.." />
+                    @error('price')
+                        <small class="form-text text-danger"> </small> 
+                    @enderror
+                    <br>
+                    <br>
+                    <input type="text" name="category" class="form-control" placeholder="Product Category.." />
+                    @error('category')
+                        <small class="form-text text-danger"> </small> 
+                    @enderror
+                    <br>
+                    <br>
+                    <a class="btn btn-primary add-product" style="color: =fff">Add Product</a>
+                    <br>
+                    <br>
+                </form>
+            </div>
+
+            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+            <script>
+                    $(document).ready( function (){
+                        $("a.add-product").on( "click",function (e){
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ url('products/store') }}",
+                                data: { 
+                                    "_token"      : "{{ csrf_token() }}" , 
+                                    "name"        : $(".signup-form input[name='name']").val() ,
+                                    "description" : $(".signup-form input[name='description']").val() ,
+                                    "price"       : $(".signup-form input[name='price']").val() ,
+                                    "category"    : $(".signup-form input[name='category']").val() ,
+                                },
+                                success: function ( data ) {
+                                    if( data.status == true){
+                                        alert("Goooooooooooood");
+                                    }
+                                },
+                                error: function(feedback){
+                                    alert("Error");   // failed to connect with url ( Controller )
+                                }
+                            });
+                        });
+                    });  
+            </script>
+ 
+        ====================================================================================================================================
+        ============================================== using formData ==========================================================
+
+
+
+
+            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+            <script>
+                    $(document).ready( function (){
+                        $("a.add-product").on( "click",function (e){
+                            $.ajax({
+                                type: "POST",  
+                                url: "/admin/projects",   
+                                data: new FormData( $("=CreateProjectModal form")[0] ),  
+                                processData: false,
+                                contentType : false , 
+                                cache    : false,
+                                success: function ( response ) {
+                                        // console.log(response);
+                                        if( response.status == 'error' && response.msg == 'validation error' ){
+                                            $.each( response.errors , function( key , val ){
+                                                $("small.text-danger." + key ).text(val[0]);
+                                            });
+                                        }
+                                        else if( response.status == 'error' && response.msg == 'insert operation failed'  ){
+                                            alert("Error at save, please try later.... ");  
+                                        }
+                                        else if( response.status == 'success' ){
+                                            alert("Project Saved!");
+                                            window.location.href = "/admin/projects";
+                                        }
+                                },
+                                error: function(response){
+                                    alert("Error");   // failed to with url
+                                }
+                            });
+                        });
+                    });  
+            </script>
+
+
+        ====================================================================================================================================
+        ============================================== send _csrf token from blade to Ajax js File ==========================================================   
+            1- in blade file ======>
+                <div class="content">
+                    <h1 class="text-center"> Create Product </h1>
+                    <form  class="create-product"  enctype="multipart/form-data">
+                        @csrf
+                        <input type="text" name="name" class="form-control" value="{{ old('name') }}" placeholder="Product Name.." />
+                        @error('name')
+                            <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                        @enderror
+                        <br>
+                        <input type="text" name="description" class="form-control" value="{{ old('description') }}" placeholder="Product Description.." />
+                        @error('description')
+                            <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                        @enderror
+                        <br>
+                        <input type="text" name="price" class="form-control" value="{{ old('price') }}" placeholder="Product Price.." />
+                        @error('price')
+                            <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                        @enderror
+                        <br>
+                        <input type="text" name="category" class="form-control" value="{{ old('category') }}" placeholder="Product Category.." />
+                        @error('category')
+                            <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                        @enderror
+                        <br>
+                        <a class="btn btn-primary create-product-btn" style="color: =fff">Add Product</a>
+                        <br>
+                    </form>
+                </div>
+
+
+                <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+                <script>
+                        var createProductRoute = '{{ url("products/store")}}';
+                        var editProductRoute   = '{{ url("products/update")}}';
+                        var deleteProductRoute = '{{ url("products/delete")}}';
+                        var _token             = "{{ csrf_token() }}" ;
+                </script>
+                <script src="{{ asset("js/ajax/file.js") }}"></script>
+
+
+        2- in controller instead of redirect use respons json ==>
+            public function store(ProductRequest $request)
+            { 
+                $product = Product::create([   // Product mean model and 
+                    'name'        => $request -> name ,    // $request -> name ===> name field 
+                    'price'       => $request -> price , // $request -> description ===> description field
+                    'description' => $request -> description , // $request -> description ===> description field
+                    'category'    => $request -> category , // $request -> category ===> category field
+                    'image'       => $file_name ,  // $request -> img ===> img field
+                ]);
+                if( $product){  // send object json to Ajax 
+                    return response() -> json([
+                        "status" => true ,   // Crreated Successfully
+                        "msg" => "Product Updated Successfully :)" ,
+                    ]);
+                }
+            }
+            
+        3- create js file in public folder ===>
+            $(".create-product-btn").on( "click",function (e){
+                e.preventDefault();
+                var formData = new FormData( $(".create-product")[0] );
+                $.ajax({
+                    type: "POST",
+                    "enctype" : "multipart/form-data" ,
+                    url: createProductRoute,
+                    data: formData  ,
+                    processData: false,
+                    contentType : false , 
+                    cache    : false,
+                    success: function ( data ) {
+                        if( data.status == true){
+                            alert( data.msg );
+                        }
+                    },
+                    error: function(feedback){
+                        alert("Error");   // failed to connect with url ( Controller )
+                    }
+                });  
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+         
+
+    (34) Validator in Request   
+    --------------------------------------
+
+        types of Validator {
+            'required',
+            "max:32",
+            "min:32",
+            "numeric",
+            ...
+            ...
+            ...
+            ...
+        }
+        !!!!!!!! Continue with prevous setps !!!!!!!  
+
+        $validator = Validator::make(  $request->all() , [$rules] , [$messages] ); // first array and second is required
+        public function store( Request $request ){
+
+            $validator = Validator::make(  $request->all()  , [   
+                "name.required"      => "name is important" ,
+                "price.required"     => "price is important" ,
+                "category.required"  => "category is important" ,
+            ] , [
+                "name"        => " required | max:32 " ,
+                "price"       => " required | numeric | max:4 " ,
+                "description" => " required | max:100 " ,
+                "category"    => " required | max:32 " ,
+            ]);
+
+            if( $validator -> fails()) { // mean if validation fail
+                // return "Error";      // to return message "Error"
+                return $validator -> errors() ;  // return errors as array 
+                // return $validator -> errors() -> first() ;  // return first in errors array 
+                // return redirect() -> back() ->withErrors($validator) ->withInputs( $request->all() );
+            }else{
+                Product::create([   // Product mean model and 
+                    'name'        => $request -> name ,    // $request -> name ===> name field 
+                    'price'       => $request -> price , // $request -> description ===> description field
+                    'description' => $request -> description , // $request -> description ===> description field
+                    'category'    => $request -> category , // $request -> category ===> category field
+                ]);
+                return "insert in DB";
+                // return redirect() -> back() -> with( [ "success" => " Product Added Successfully :) "] ) ;
+            }
+        }
+
+        ============================================================================================================
+        ============================== For Organized ==============================================================
+
+        public function store( Request $request ){
+
+            $rules = [
+                "name"        => " required | max:32 " ,
+                "price"       => " required | numeric | max:4 " ,
+                "description" => " required | max:100 " ,
+                "category"    => " required | max:32 " ,
+            ];
+            $messages = [
+                "name.required"      => "name is important" ,
+                "price.required"     => "price is important" ,
+                "category.required"  => "category is important" ,
+            ];
+
+            $validator = Validator::make(  $request->all() , $rules , $messages );
+
+            if( $validator -> fails()) { // mean if validation fail
+                // return "Error";      // to return message "Error"
+                // return $validator -> errors() ;  // return errors as array 
+                // return $validator -> errors() -> first() ;  // return first in errors array 
+                // return redirect() -> back() ->withErrors($validator) ->withInputs( $request->all() );
+            }else{
+
+                Product::create([   // Product mean model and 
+                    'name'        => $request -> name ,    // $request -> name ===> name field 
+                    'price'       => $request -> price , // $request -> description ===> description field
+                    'description' => $request -> description , // $request -> description ===> description field
+                    'category'    => $request -> category , // $request -> category ===> category field
+                ]);
+                return "insert in DB";
+                // return redirect() -> back() -> with( [ "success" => " Product Added Successfully :) "] ) ;
+
+            }
+        }
+
+
+        ===========================================================================================================
+        ============================== validation using protected functions ==============================================================
+
+        protected function getmessages() {
+            return $messages = [
+                "name.required"      => "name is important" ,
+                "price.required"     => "price is important" ,
+                "category.required"  => "category is important" ,
+            ] ;
+        }
+        
+        protected function getRules() {
+            return $rules = [
+                "name"        => " required | max:32 " ,
+                "price"       => " required | numeric | max:4 " ,
+                "description" => " required | max:100 " ,
+                "category"    => " required | max:32 " ,
+            ] ;
+        }
+
+        public function store( Request $request ){
+            $rules = $this->getRules();
+            $messages = $this->getmessages();
+            $validator = Validator::make(  $request->all() , $rules , $messages );
+
+            if( $validator -> fails()) { // mean if validation fail
+                // return "Error";      // to return message "Error"
+                return $validator -> errors() ;  // return errors as array 
+                // return $validator -> errors() -> first() ;  // return first in errors array 
+                // return redirect() -> back() ->withErrors($validator) ->withInputs( $request->all() );
+            }else{
+
+                Product::create([   // Product mean model and 
+                    'name'        => $request -> name ,    // $request -> name ===> name field 
+                    'price'       => $request -> price , // $request -> description ===> description field
+                    'description' => $request -> description , // $request -> description ===> description field
+                    'category'    => $request -> category , // $request -> category ===> category field
+                ]);
+                return "insert in DB";
+                // return redirect() -> back() -> with( [ "success" => " Product Added Successfully :) "] ) ;
+
+            }
+        }
+
+        ====================================================================================================
+        ============================== Validation Using Request ================================================
+        1-  create request to put validation code in it 
+            use this command to create request ==> php artisan make:request ProductRequest
+            we put validation for product forms
+
+        2- in controller must add class ProductRequest , delete all all messages , rules and let only ( insert , edit ) in DB
+            use App\Http\Requests\ProductRequest;
+            public function store(ProductRequest $request)
+            {
+                Product::create([   // Product mean model and 
+                    'name'        => $request -> name ,    // $request -> name ===> name field 
+                    'price'       => $request -> price , // $request -> description ===> description field
+                    'description' => $request -> description , // $request -> description ===> description field
+                    'category'    => $request -> category , // $request -> category ===> category field
+                ]);
+                //return redirect() -> back() -> with( [ "success" => " Product Added Successfully :) "] ) ;
+            }
+
+        3-  in ProductRequest 
+            public function rules()
+            {
+                return [
+                    "name"        => " required | max:32 " ,
+                    "price"       => " required | numeric | max:4 " ,
+                    "description" => " required | max:100 " ,
+                    "category"    => " required | max:32 " ,
+                ];
+            }
+
+            public function messages()
+            {
+                return [
+                    "name.required"      => "name is important" ,
+                    "price.required"     => "price is important" ,
+                    "description.required"  => "description is important" ,
+                    "category.required"  => "category is important" ,
+                ];
+            }
+
+        4-  if i use validation it Error ( 403 | This action is unauthorized) so 
+            in ProductRequest 
+            public function authorize()
+            {
+                return false;   // edit it false ==> true
+            } 
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (35) Show Error of Validator  in Blade   
+    --------------------------------------
+
+        1- to show error in blade ==>
+            @if( Session::has("success") )
+                <div class="alert alert-success">
+                    {{ Session::get("success") }}
+                </div>
+            @endif
+            <input type="text" name="name" class="form-control" placeholder="Product Name..">
+            @error('name')
+                <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+            @enderror
+
+            <input type="text" name="price" class="form-control" placeholder="Price..">
+            @error('price')
+                <small class="form-text text-danger">{{$message }}</small>
+            @enderror
+
+        2-  In Controller ==> 
+            public function store( Request $request ){
+
+                $rules = $this->getRules();
+
+                $messages = $this->getmessages();
+
+                $validator = Validator::make(  $request->all() , $rules , $messages );
+
+                if( $validator -> fails()) { // mean if validation fail
+                    return redirect() -> to("product/add") ->withErrors($validator) ->withInputs( $request->all() );
+                    // return redirect() -> back() ->withErrors($validator) ->withInputs( $request->all() );
+                }else{
+
+                    Product::create([   // Product mean model and 
+                        'name'        => $request -> name ,    // $request -> name ===> name field 
+                        'price'       => $request -> price , // $request -> description ===> description field
+                        'description' => $request -> description , // $request -> description ===> description field
+                        'category'    => $request -> category , // $request -> category ===> category field
+                    ]);
+
+                }
+
+            }
+            ==================================================================================================================
+            ============================================ Show Error in Ajax =============================================================
+
+            1- in blade file ===>
+                    <form  class="create-product"  enctype="multipart/form-data">
+                        @csrf
+
+                        <input type="text" name="name" class="form-control" placeholder="Product Name.." />
+                        <small class="form-text text-danger name">  </small> <!-- message is var in laravel -->
+                        <br>
+
+                        <input type="text" name="description" class="form-control" placeholder="Product Description.." />
+                        <small class="form-text text-danger description">  </small> <!-- message is var in laravel -->
+                        <br>
+
+                        <input type="text" name="price" class="form-control"  placeholder="Product Price.." />
+                        <small class="form-text text-danger price">  </small> <!-- message is var in laravel -->
+                        <br>
+
+                        <input type="text" name="category" class="form-control" placeholder="Product Category.." />
+                        <small class="form-text text-danger category">  </small> <!-- message is var in laravel -->
+                        <br>
+
+                        <input type="file" class="form-control" name="img"  />
+                        <small class="form-text text-danger img">  </small> <!-- message is var in laravel -->
+                        <br>
+
+                        <a class="btn btn-primary create-product-btn" style="color: =fff">Add Product</a>
+                        <br>
+                    </form>
+
+            2-  in js file ==>
+                /*=========== Create Product Ajax ============*/
+                $(".create-product-btn").on( "click",function (e){
+                
+                    e.preventDefault();
+                    $("small.text-danger").text("");
+                    var formData = new FormData( $(".create-product")[0] );
+
+                    $.ajax({
+                        type: "POST",
+                        "enctype" : "multipart/form-data" ,
+                        url: createProductRoute,
+                        data: formData  ,
+                        processData: false,
+                        contentType : false , 
+                        cache    : false,
+                        success: function ( data ) {
+                            alert(data.status);
+                            window.location = ProductRoute ;
+                        },
+                        error: function(reject){
+                            var response = $.parseJSON(reject.responseText);
+                            $.each( response.errors , function( key , val ){
+                                $("small.text-danger." + key ).text(val[0]);
+                            });
+                        }
+                    });
+                });
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+    (36) translate validator    
+    --------------------------------------  
+        in messages array call translate method
+
+        protected function getmessages() {
+            return $messages = [
+                "name.required"      => __("message.product name is required") ,
+                "price.required"     => "price is important" ,
+                "category.required"  => "category is important" ,
+            ] ;
+        }
+
+
+
+     
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+     
+
+
+
+     
+
+
+
+
+
+    (37) Get all culmns from DB    
+    -------------------------------------------
+
+        1-  in web.php create 
+            /* ========= Index ========= */
+            Route::get("/",'ProductController@index');
+
+        2-  in controller
+            public function index()
+            {
+                $products = Product::select( "id" ,"name" ,"description" ,"price" ,"category" ) -> get(); // SELECT * FROM category 
+                return view("products.index", compact("products") ) ;
+            }
+
+        3-  Create index blade file ==> 
+
+            <div class="content">
+                <h1 class="text-center"> All Products </h1>
+                @if( Session::has("success") )
+                    <div class="alert alert-success">
+                        {{ Session::get("success") }}
+                    </div>
+                @endif
+                <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                    <th scope="col">=</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($products as $product)
+                    <tr>
+                        <th scope="row"> {{ $product -> id }} </th>
+                        <td> {{ $product -> name }}  </td>
+                        <td> {{ $product -> description }}  </td>
+                        <td> {{ $product -> price }}  </td>
+                        <td> {{ $product -> category }}  </td>
+                        <td class="text-center">
+                        <a href="{{ url("products/edit/".  $product -> id ) }}" class="btn btn-primary"> <i class="fas fa-edit"></i> </a>
+                        <a href="{{ url("products/delete/".  $product -> id ) }}" class="btn btn-danger"> <i class="fas fa-trash-alt"></i> </a>
+                        </td>
+                    </tr>    
+                    @endforeach
+                </tbody>
+                </table>
+                <a href="{{ url("products/create") }}" class="btn btn-primary"> Add Product</a>
+            </div>
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+
+
+
+
+
+
+
+        
+
+        
+
+        
+
+        
+
+        
+    (38) Edit in DB culmns
+    -------------------------------------------
+
+        1-  in web.php create ==>
+            /* ========= Edit ========= */
+            Route::get("edit/{id}",'ProductController@edit');
+            Route::post("update/{id}",'ProductController@update');  // post or patch
+
+        2-  in controller with using ProductRequest
+            =============================== Edit ==============================
+            public function edit($id)
+            {
+                //Product::findOrFail($id);  // to check id in Db With Error 404
+                $product = Product::find($id);  // to check id in Db With Custom Error
+                if( !$product ){
+                    return redirect() -> back();
+                }
+                $product = Product::select( "id" , "name" , "price" , "description" , "category") ->find($id);
+                return view("products.edit" , compact("product") ) ;
+            }
+
+            public function update(ProductRequest $request, $id)
+            {
+
+                /* =================== Check Id Exist =================== */
+                //Product::findOrFail($id);  // to check id in Db With Error 404
+                // OR
+                $product = Product::find($id);  // to check id in Db With Custom Error
+                if( !$product ){
+                    return redirect() -> back();
+                }
+
+                /* =================== Update =================== */
+                $product-> update([
+                    'name'        => $request -> name ,    // $request -> name ===> name field 
+                    'price'       => $request -> price , // $request -> description ===> description field
+                    'description' => $request -> description , // $request -> description ===> description field
+                    'category'    => $request -> category , // $request -> category ===> category field
+                ]);
+                // OR
+                // $product-> update( $request ->all() );
+                /* =================== redirect =================== */
+                return redirect("/products") -> with([ "success" => "Product Update Successfully"]); //redirect to main page with session message
+
+            }
+        
+        3-  create edit blade and link must direct ti edit blade must be 
+            href="{{ url("products/edit/".  $product -> id ) }}"
+            
+            edit blade file ==> 
+            <form action="{{ url("products/update/" . $product -> id ) }}" method="POST">
+                @csrf
+                <input type="text" name="name" class="form-control" value="{{ $product -> name }}" placeholder="Product Name.." />
+                @error('name')
+                    <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                @enderror
+                <br>
+                <input type="text" name="description" class="form-control" value="{{ $product -> description }}" placeholder="Product Description.." />
+                @error('description')
+                    <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                @enderror
+                <br>
+                <input type="text" name="price" class="form-control" value="{{ $product -> price }}" placeholder="Product Price.." />
+                @error('price')
+                    <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                @enderror
+                <br>
+                <input type="text" name="category" class="form-control" value="{{ $product -> category }}" placeholder="Product Category.." />
+                @error('category')
+                    <small class="form-text text-danger">{{$message }}</small> <!-- message is var in laravel -->
+                @enderror
+                <br>
+                <input type="submit" class="btn btn-primary" value="Edit" />
+                <br>
+            </form>
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+         
+
+        
+    (39) Delete DB culmns
+    -------------------------------------------
+
+        1-  in web.php create ==>
+            /* ========= delete ========= */
+            Route::group( [ 'prefix' => 'products', "namespace" => "products" ] ,  function()
+            {
+                Route::get("delete/{id}",'ProductController@destroy');
+            });
+
+        2-  in controller
+            ============================== Delete ==============================
+            public function destroy($id)
+            {
+                /* =================== Check Id Exist =================== */
+                //Product::findOrFail($id);  // to check id in Db With Error 404
+                // OR
+                $product = Product::find($id);  // to check id in Db With Custom Error
+                if( !$product ){
+                    return redirect() -> back();
+                }
+                $product-> delete();
+
+                /* =================== redirect =================== */
+                return redirect("/products") -> with([ "success" => "Product Deleted Successfully"]);
+            }
+
+        3-  in blade file in such product must have ==>
+            <table class="table table-striped">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">=</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($products as $product)
+                    <tr>
+                        <th scope="row"> {{ $product -> id }} </th>
+                        <td> {{ $product -> name }}  </td>
+                        <td> {{ $product -> description }}  </td>
+                        <td> {{ $product -> price }}  </td>
+                        <td> {{ $product -> category }}  </td>
+                        <td class="text-center">
+                            <a href="{{ url("products/edit/".  $product -> id ) }}" class="btn btn-primary"> <i class="fas fa-edit"></i> </a>
+                            <a href="{{ url("products/delete/".  $product -> id ) }}" class="btn btn-danger"> <i class="fas fa-trash-alt"></i> </a>
+                        </td>
+                    </tr>    
+                @endforeach
+              </tbody>
+            </table>
+
+        ===========================================================================================================
+        ============================== Delete Using Ajax ============================================
+        ===========================================================================================================
+
+        1-  in web.php create ==>
+            /* ========= delete ========= */
+            Route::group( [ 'prefix' => 'products', "namespace" => "products" ] ,  function()
+            {
+                Route::post("delete/{id}",'ProductController@destroy');
+            });
+
+        2-  in controller with using ProductRequest    // ProductRequest ==> it contain what i send in ajax data
+            ============================== Delete ===============================
+            public function destroy( Request $request )
+            {
+                /* =================== Check Id Exist =================== */
+                //Product::findOrFail($id);  // to check id in Db With Error 404
+                // OR
+                $product = Product::find( $request -> id );  // to check id in Db With Custom Error
+                if( !$product ){
+                    return response() -> json([
+                        "status" => false ,   // Crreated Successfully
+                        "msg"    => "Product Deleted Failed :)" ,
+                    ]);
+                }
+                $product-> delete();
+                return response() -> json([
+                    "status"     => true ,   // Created Successfully
+                    "product_id" => $request -> id ,   // send id again to use it in js
+                    "msg"        => "Product Deleted Successfully :)" , // Created Successfully
+                ]);
+            }
+
+        3-  in blade file ==>
+            <tbody>
+                @foreach ($products as $product)
+                    <tr product-id=" {{ $product -> id }}" class="row_{{ $product -> id }}">
+                        <th scope="row"> {{ $product -> id }} </th>
+                        <td> {{ $product -> name }}  </td>
+                        <td> {{ $product -> description }}  </td>
+                        <td> {{ $product -> price }}  </td>
+                        <td> {{ $product -> category }}  </td>
+                        <td> <img src="{{ asset("images/products/" . $product -> image ) }}" alt=""> </td>
+                        <td class="text-center">
+                            <a href=""  class="btn btn-primary edit-btn" > Edit </a>
+                            <a href="" class="btn btn-danger delete-btn"> Delete </a>
+                        </td>
+                    </tr>    
+                @endforeach
+            </tbody>
+            {{---------- Scripts ----------}}
+            <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+            <script>
+                    var createProductRoute = '{{ url("products/store")}}' ;
+                    var editProductRoute   = '{{ url("products/update")}}' ;
+                    var deleteProductRoute = '{{ url("products/delete")}}' ;
+                    var _token             = "{{ csrf_token() }}" ;
+            </script>
+            <script src="{{ asset("js/ajax/file.js") }}"></script>
+
+        4- in Js file ====>
+            $("a.delete-btn").on( "click",function (e){
+                e.preventDefault();
+                var id = $(this).parents("tr").attr("product-id");
+                $.ajax({
+                    type: "POST" ,
+                    url: deleteProductRoute ,
+                    data: {
+                        "_token" : _token ,
+                        "id"     : id ,
+                    }  ,
+                    success: function ( data ) {
+                        if( data.status == true ){
+                            $('tbody tr.row_' + data.product_id).remove();
+                        }
+                    },
+                    error: function(feedback){
+                        alert("Error");   // failed to connect with url ( Controller )
+                    }
+                });
+            });
+
+        
+
+
+        
+
+
+
+
+
+
+
+
+         
+
+
+
+
+
+         
+
+
+
+
+
+
+
+
+         
+        
+
+
+        
+        
+    (40) Multi Delete DB culmns
+    -------------------------------------------
+
+        in Multi Delete we will use form 
+
+        1-  in web.php create ==>
+                /* ========= delete ========= */
+                Route::group( [ 'prefix' => 'products', "namespace" => "products" ] ,  function()
+                {
+                    Route::delete("delete/{id}",'ProductController@destroy');
+                });
+
+        2-  in blade file in such product must have ==>
+
+        3-  in controller
+                public function destroy( $id = null )
+                {
+                    //return request("id");
+                    if( $id != null){
+
+                        /* =================== Check Id Exist =================== */
+                        //Product::findOrFail($id);  // to check id in Db With Error 404
+                        // OR
+                        $product = Product::find($id);  // to check id in Db With Custom Error
+                        if( !$product ){
+                            return redirect() -> back();
+                        }
+                        /* =================== delete =================== */
+                        $product-> delete();
+
+                    }elseif( request() -> has("id") ){
+                        Product::destroy( request("id") );
+                    }else{
+                        return redirect("/products") -> with([ "success" => "Product Not Selected"]);
+                    }
+    
+                    /* =================== redirect =================== */
+                    return redirect("/products") -> with([ "success" => "Product Deleted Successfully"]);
+                }
+        
+
+
+
+        
+
+
+
+        
+
+
+        
+
+
+
+        
+
+
+
+
+
+
+        
+
+
+
+
+
+    (41) Upload img 
+    --------------------------------------
+        
+        1-  create "create" blade in products folder 
+            <form action="{{ url("products/store") }}" method="POST" enctype="multipart/form-data" >
+                @csrf
+                <input type="file" class="form-control" name="img"  />
+                <br>
+                <input type="submit" class="btn btn-primary" />
+                <br>
+            </form>
+
+        2-  in web.php put Routes
+            Route::group( [ 'prefix' => 'products', "namespace" => "products" ] ,  function()
+            {
+                /* ========= Create ========= */
+                Route::get("create",'ProductController@create');
+                Route::post("store",'ProductController@store');
+
+            });
+
+        3-  create model Product.php with migration file in one line command ==> 
+            ===> php artisan make:model Users -m
+            And don't forget put all tables in $fillable
+            In migration file put this code ==>
+            ===> $table->string('img');
+
+        4-  in public folder create "images/products"
+
+        5-  Go to "config/filesystems.php" add this Code ==>
+            'products' => [
+                'driver' => 'local',
+                'root' => storage_path('public/images/products/'),
+                'url' => env('APP_URL').'/storage',
+                'visibility' => 'public',
+            ],
+
+        6-  create product controller use this command ==> 
+            ===> php artisan make:controller ProductController -r 
+
+            public function store(ProductRequest $request)
+            {
+                
+                /*=========== Upload image in DB ============*/
+                $file_extention = $request -> img -> getClientOriginalExtension();
+                $file_name = time() . "." . $file_extention;
+                $path = "images/products" ;
+                $request -> img -> move( $path , $file_name );
+                Product::create([   // Product mean model and 
+                    'name'        => $request -> name ,    // $request -> name ===> name field 
+                    'price'       => $request -> price , // $request -> description ===> description field
+                    'description' => $request -> description , // $request -> description ===> description field
+                    'category'    => $request -> category , // $request -> category ===> category field
+                    'img'         => $file_name , 
+                ]);
+                /* =================== redirect =================== */
+                return redirect("/products") -> with([ "success" => "Product Created Successfully"]);
+
+            }
+ 
+        ======================================================================================================
+        ============================== For Organized ==========================================================================
+
+            public function store(ProductRequest $request)
+            {
+                /*=========== Upload image in DB ============*/
+                $file_name = $this->uploadImg( $request -> img , "images/products" );
+                Product::create([   // Product mean model and 
+                    'name'        => $request -> name ,    // $request -> name ===> name field 
+                    'price'       => $request -> price , // $request -> description ===> description field
+                    'description' => $request -> description , // $request -> description ===> description field
+                    'category'    => $request -> category , // $request -> category ===> category field
+                    'img'         => $file_name , // $request -> img ===> img field
+                ]);
+                /* =================== redirect =================== */
+                return redirect("/products") -> with([ "success" => "Product Created Successfully"]);
+            }
+            protected function uploadImg( $imgRequest , $path ){
+                $file_extention = $imgRequest -> getClientOriginalExtension();
+                $file_name = time() . "." .$file_extention;
+                $imgRequest -> move( $path , $file_name );
+                return $file_name ; // do func and return $file_name to save it in DB
+            }
+ 
+ 
+        ==================================================================================================================
+        ============================== For More Organized usong Traits ===================================================
+        1-  create traits folder and put ( ImgTrait.php ) in folder
+            add this code in ImgTrait.php ===>
+            <?php
+            namespace App\Traits ;
+            trait ImgTrait
+            {
+                protected function uploadImg( $imgRequest , $path ){
+                    $file_extention = $imgRequest -> getClientOriginalExtension();
+                    $file_name = time() . "." .$file_extention;
+                    $imgRequest -> move( $path , $file_name );
+                    return $file_name ; // do func and return $file_name to save it in DB
+                }
+            }
+
+        2- in ProductController ==>
+            ============== ImgTrait ============================
+            use ImgTrait ;
+            public function store(ProductRequest $request)
+            {
+                /*=========== Upload image in DB ============*/
+                $file_name = $this->uploadImg( $request -> img , "images/products" );
+
+                Product::create([   // Product mean model and 
+                    'name'        => $request -> name ,    // $request -> name ===> name field 
+                    'price'       => $request -> price , // $request -> description ===> description field
+                    'description' => $request -> description , // $request -> description ===> description field
+                    'category'    => $request -> category , // $request -> category ===> category field
+                    'img'         => $file_name , // $request -> img ===> img field
+                ]);
+
+                /* =================== redirect =================== */
+                return redirect("/products") -> with([ "success" => "Product Created Successfully"]);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    (42) Laravel Task Scheduler 
+    -------------------------------------------
+
+        Mean to make (Code) run every (time) 
+        ==> ( we will test expiration users every 5 min auto )
+
+        1-  use this command ==> php artisan make:command Expiration     
+            file will create in namespace App\Console\Commands;
+
+        2-  to change name and description ==>
+            protected $signature = 'user:expire';
+            protected $description = 'expire users every 5 min auto';
+ 
+        3-  will will add DB culmn in users table using migration
+            $table->tinyInteger('expire')->default(0);
+
+        4-  dont forget put "expire" culmn in $fillable in User.php Model  
+
+        5-  in Expiration.php in ( namespace App\Console\Commands )
+            public function handle()
+            {
+                $users = User::where("expire" , 0 )->get(); // SELECT * FROM users WHERE `expire` = 0 
+                foreach( $users as $user ){
+                    $user -> update(["expire" => 1 ]);  // UPDATE users SET `expire` = 0 WHERE `expire` = 0 
+                }
+            }
+
+        6-  Now to run code every 5 min go to Kernel.php ( namespace App\Console ; )
+            add this code ==>
+            use App\Console\Commands\Expiration; // in top
+            protected $commands = [
+                Expiration::class,
+            ];
+            protected function schedule(Schedule $schedule)
+            {
+                $schedule->command('inspire')->hourly();  //command()
+            }
+        
+        7-  !!!!! Note it works only in live server !!!!!
+            to test and run it as time was finish
+            use this command ==> php artisan schedule:run
+
+        8-  to get schedule list visit ( https://laravel.com/docs/7.x/scheduling )
+        
+
+
+
+
+        
+        
+
+
+
+
+        
+
+
+        
+        
+
+
+
+
+        
+        
+
+
+
+
+        
+        
+
+
+
+
+        
+    (43) Laravel Event & listener 
+    -------------------------------------------
+        for example when visit link increase views in DB
+
+        1-  in web.php ==> 
+            /*======== Youtube ===========*/
+            Route::get('youtube', "YoutubeController@view");
+
+        2-  create controller YoutubeController ==>
+            public function view(){
+                $video = Video::first(); // SELECT * From videos ORDER BY id ASC LIMIT 1 ===> save in in var $video
+                return view("youtube" , compact("video"));  
+            }
+
+        3-  create blade file ( youtube.blade.php )  ==> 
+            <h1>Views ({{ $video-> views }})</h1>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/vmADdY1iQ2E" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+        4-  create event use this command ==> 
+            ==> php artisan make:event VisitYoutube
+            folder (app\Events) will created
+
+        5-  create event use this command ==> 
+            ==>  php artisan make:listener IncreaseViews
+            folder (app\Listener) will created
+
+        6-  create migration file with Model ==>
+            ===> php artisan make:model Video -m ==>
+            class Views extends Model
+            {
+                protected $table = "views" ;  
+                protected $fillable = [ "name" , "views" ] ; 
+            }
+
+        7-  to create connect between (Event , model ) , In Event ==>
+            public $video ;
+            public function __construct( Video $video)
+            {
+                $this -> video = $video ;
+            }
+
+        8-  to create connect between ( Event , Listener ) , In Listener ==> 
+            public function handle( VisitYoutube $event)
+            {
+                $this -> UpdateViews( $event -> video ) ;
+            }
+            function UpdateViews( $video ){
+                $video -> views = $video -> views + 1 ;           // increase views + 1
+                $video -> save();          // save new num views in DB
+            }
+        
+        9-  To fire event at visit link go to controller ==>
+            public function view(){
+                $video = Video::first(); // SELECT * From videos ORDER BY id ASC LIMIT 1 ===> save in in var $video
+                event( new VisitYoutube($video) );     // because VisitYoutube has pram in construct
+                return view("youtube" , compact("video"));  
+            }
+
+        10- in namespace App\Providers\EventServiceProvider.php 
+            in protected $listen add ==>
+            use App\Events\VisitYoutube;
+            use App\Listeners\IncreaseViews;
+            protected $listen = [
+                VisitYoutube::class => [
+                    IncreaseViews::class,
+                ],
+            ];
+
+
+
+        
+
+
+
+        
+
+
+
+        
+
+
+
+        
+
+
+
+        
+
+
+
+        
+
+
+
+    (44) Larvel middleware 
+    -------------------------------------------
+        middleware ==> mean to give user access to go to this page , 
+        give visitor an allow for visit link or not .
+
+        ==> we can put it in web.php in routes as method
+                Route::get('admin/profile', function () {
+                    //...
+                })->middleware('auth'); 
+            
+        ==> You may also assign multiple middleware to the route
+                Route::get('/', function () {
+                    //...
+                })->middleware('first', 'second');
+
+        ==> When assigning middleware, you may also pass the fully qualified class name
+                use App\Http\Middleware\CheckAge;
+                Route::get('admin/profile', function () {
+                    //...
+                })->middleware(CheckAge::class);
+
+        ==> create middleware group
+                use App\Http\Middleware\CheckAge;
+                Route::middleware([CheckAge::class])->group(function () {
+                    Route::get('/', function () {
+                        //...
+                    });
+                    Route::get('admin/profile', function () {
+                        //...
+                    })->withoutMiddleware([CheckAge::class]);
+                });
+
+        ==> create group and use in it middleware 
+                Route::group(['prefix' => 'admin'], function () {
+                    Route::get("adult" , "AdultController@view");
+                });      
+
+        ==> final you can use middleware in Controller ( in method Or __construct()  )
+                public function __construct() 
+                {
+                    $this->middleware('auth'); // middleware in all methods at this Controller
+                }
+                // OR
+                public function index()
+                {
+                    $this->middleware('auth'); // middleware in this method only
+                    return view('home');
+                }
+
+
+
+
+        
+
+
+
+
+        
+
+
+
+
+
+
+        
+
+
+
+
+        
+
+
+
+
+        
+
+
+
+
+        
+
+    (45) Create Custom middleware 
+    -------------------------------------------
+        for example create custom middleware for only adults ( > 16 )
+
+        1-  create middleware use this Command ==> 
+            ==> php artisan make:middleware  CheckAge
+            middleware will created in (namespace App\Http\Middleware);
+
+        2-  to active/register this middleware must add class in kernal.php ( namespace App\Http )
+                protected $routeMiddleware = [
+                    'CheckAge' => \App\Http\Middleware\CheckAge::class,
+                ];
+
+        3-  create Route for only adult ==>
+                Route::get("adult" , "AdultController@view");
+        
+        5-  in middleware CheckAge.php ==> 
+                public function handle($request, Closure $next)
+                {
+                    $age = Auth::user() -> age ; // Auth == auth() == auth("web") // but it default guard "web" , you can check it in  ( config/auth.php ) 
+                    if( $age < 16 ){
+                        return redirect("/"); 
+                    }
+                    return $next($request);
+                }
+
+        6-  in AdultController ==> 
+                public function __construct()
+                {
+                    $this->middleware(['auth' , 'CheckAge']) ;
+                }
+                public function view(){
+                    $age = Auth::user() -> age ;
+                    return view("adult", compact("age"));
+                }
+
+        
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        
+
+
+
+
+
+
+        
+
+        
+
+
+
+        
+
+    (45) Create multi guards ( admin / user ) 
+    -------------------------------------------
+        1-  in web.php use this routes
+                /*============= Guards routes ===============*/
+                Route::get("user" , "CustomController@user") -> middleware("auth:web") ;  // OR  middleware("auth")
+                Route::get("admin" , "CustomController@admin") -> middleware("auth:admin") ;
+                Route::get("admin/login" , "CustomController@adminLogin");
+                Route::post("admin/login" , "CustomController@adminLoginCheck") -> name("adminLogin");
+
+        2-  create custom controller use this command ==>
+            ==> php artisan make:controller CustomController
+                public function user(){
+                    return view("user");
+                }
+                public function admin(){
+                    return view("admin");
+                }
+                public function adminLogin(){
+                    return view("admin.login");
+                }
+
+
+        3-  create blade files ( user.blade.php / admin.blade.php / login.blade.php )
+            and in login.blade.php  (admin) ===>
+                <form method="POST" action="{{ route('adminLogin') }}">
+
+
+        4-  create admin DB table and admin Model with one command line ==> 
+            ==> php artisan make:model Admin -m
+                use Illuminate\Foundation\Auth\User as Authenticatable;  // for make auth like users
+                class Admin extends Authenticatable
+                {
+                    protected $fillable = [ "name" , "email" , "password" ];
+                    protected $hidden = [
+                        'password'
+                    ];
+                }
+
+        5-  ( config/auth.php ) you can check guards and default guards , 
+            So duplicate guard 'web' (for users) ==>
+                'guards' => [
+                    // for users
+                    'web' => [  // guard name auth:web
+                        'driver' => 'session',
+                        'provider' => 'users',
+                    ],
+                    // for admin
+                    'admin' => [  // guard name auth:admin
+                        'driver' => 'session',
+                        'provider' => 'admins',  // take username , pass and search in admins DB 
+                    ],
+                ],
+                // And add it in providers , These providers tell Laravel what to use for 
+                authentication or validation when we try to use the guard.
+
+
+                'providers' => [
+                    'users' => [ 
+                        'driver' => 'eloquent',
+                        'model' => App\User::class, // in User Model
+                    ],
+
+                    'admins' => [  
+                        'driver' => 'eloquent',
+                        'model' => App\Admin::class, // in Admin Model
+                    ],
+                ],
+
+        6-  in custom controller ==>
+                public function adminLoginCheck( Request $request ){
+                    $this -> validate( $request , [
+                        "email"    => "required|email" ,
+                        "password" => "required|min:6" ,
+                    ]);
+                    if( Auth::guard("admin") -> attempt([ "email" => $request -> email , "password" => $request -> password ]) ){  // attempt ==> mean see it in tables
+                        return redirect() -> intended("/admin");
+                    }
+                    return  back() -> withInput( $request ->only('email') );
+                }
+
+        
+
+        
+
+        
+
+
+
+        
+
+
+        
+
+
+        
+
+
+
+        
+        
+
+
+        
+
+
+
+        
+
+
+
+
+        
+
+
+    (46) get user Auth info  
+    -------------------------------------------
+        $age   = Auth::user() -> age ;
+        $id    = Auth::user() -> id ;
+        $email = Auth::user() -> email ;
+        
+
+        
+
+        
+
+
+
+        
+
+
+
+        
+
+
+
+
+        
+
+
+        
+
+
+
+
+
+        
+
+    (47) Sql Laravel queries    
+    -------------------------------------------
+
+        1- get all table culmns
+        --------------------------
+            ((   SELECT * FROM `users`   ))
+            ==> $users = DB::table('users')->get();   // we can use table() method .  // get() mean after select all get it in variable for loop it in view
+            ==> $users = App\User::get();             // use class name in same query 
+            ==> $users = User::get();                 // we must here ==> use App\User;  in top
+            
+
+
+        2- get Single Row / Column in table by id
+        ------------------------------------------
+            ((   SELECT * FROM `users` WHERE id = 3    ))
+            ==> $user = User::find(3);           // find() with id only 
+            ==> $user = User::where('id', 3 ) -> first();       // not use get()
+            ==> $user = User::firstWhere('id', 3) ;
+
+
+        3- get random records in DB
+        ------------------------------------------
+            ((   select * from `posts` order by RAND() limit 3  ))
+            ==> $posts = Post::inRandomOrder()->limit(3)->get();
+
+
+        3- get first row ( Single Row ) in table 
+        ---------------------------------------------
+            ((   SELECT * FROM `users` ORDER BY `id` ASC   ))
+            ==> $user = User::first();  // first row in table
+            ==> $user = User::all() -> first();
+
+        
+        4- get last row in table ( Single Row )
+        ---------------------------------------------
+            ((  SELECT * FROM `users` ORDER BY `id` Desc  ))
+            ==> $user = User::all() -> last();
+
+
+        5- where in Laravel
+        ---------------------------------------------
+            ((   SELECT * FROM `users` where age = 23   ))
+            ===> $users = User::where("age" , 23 )->get();  
+            => orWhere("age" , 23 )
+            => where("age" , "=" , 23 )  
+            => where("age" , ">" , 23 ) 
+            => where("age" , "<" , 23 ) 
+
+            ((   SELECT * FROM `users` where age = NULL   ))  
+            ===> $users = User::whereNull("age")->get();     
+
+            ===> $users = User::whereBetween('age', [20, 25]) ->get();     
+            ===> $users = User::whereNotBetween('age', [20, 25]) ->get();     
+
+            // where with timestamps
+            => whereDate('created_at', '2016-12-31')  // or updated_at
+            => whereMonth('created_at', '12')
+            => whereDay('created_at', '31')
+            => whereYear('created_at', '2016')
+            => whereTime('created_at', '=', '11:20:45')
+
+
+
+        6- limit in Laravel
+        ---------------------------------------------
+            ((   SELECT * FROM `users` where age = 23 LIMIT 10  ))
+            ==> $users = User::where("age" , 23 ) -> limit(10) ->get(); 
+    
+
+        7- Order by in Laravel
+        ---------------------------------------------
+            ((   SELECT * FROM `users` ORDER BY id DESC  ))
+            ==> $users = User::orderByDesc('id') -> get() ; // laravel 4
+            ==> $users = User::orderBy('id' , "desc") -> get() ;
+    
+            ((   SELECT * FROM `users` ORDER BY id ASC  ))
+            ==> $users = User::orderByAsc('id') -> get() ;  // laravel 4
+            ==> $users = User::orderBy('id' , "asc") -> get() ;
+
+
+        8- select in Laravel
+        ---------------------------------------------
+            ((   SELECT `name` , `desc` , `email`  FROM `users` ORDER BY id DESC  ))
+            ==> $users = User::select('name','desc',"email") ->get();
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        
+
+
+
+
+
+        
+
+
+        
+
+
+
+
+      (48) setattribute laravel model
+      ------------------------------------
+
+        mean add fake culmns in DB in this method
+        ==> setAttribute( fake_culmn , value ) 
+
+
+        $posts = Post::with("user")->limit(20)->get();
+        foreach( $posts as $post ){
+            $post -> setAttribute("added_at" , $post -> created_at -> diffForHumans() );  // diffForHumans() to covert date to (2 days ago)
+        }
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        
+
+
+
+
+
+        
+
+
+        
+
+
+
+        
+
+
+
+    (48) Laravel Eloquent
+    ===========================
+
+        Laravel Relations 
+        =====================
+
+            1-  One To One
+            ------------------
+
+                ==> like (users table) have ( address table / mobile table ) 
+                1-  create Model with migration file , this command ==>
+                    ==> php artisan make:model Mobile -m
+                    ==> And in migration file 
+                        Schema::create('mobiles', function (Blueprint $table) {
+                            $table->id();
+                            $table->string("code");
+                            $table->string("phone");
+                            $table->integer("user_id");    
+                        });
+
+
+                2-  in User Model ( users table is an main table) ==>
+                        ============================ Relations ==============================
+                        public function mobile(){
+                            return  $this -> hasOne("App\Mobile" , "user_id" ); // OR   hasOne("Mobile::class")
+                        }                  
+                        // mean this class belonge to mobile class and forgien key is user_id
+                        // we mustn't add forgien key (user_id) if at same default in laravel  ( offer_id , product_id ) with
+                        // we mustn't add local key (id) if at same default in laravel  (id)
+
+
+                3-  in Mobile Model ( mobile table is an pranche of user ) ==>
+                        ============================ Relations ==============================
+                        public function user(){
+                            return  $this -> belongsTo("App\User") ;  
+                        }
+                        // mean this class belonge to phone class and forgien key is user_id
+                        // we mustn't add forgien key (user_id) if at same default in laravel  ( offer_id , product_id ) with
+                        // we mustn't add local key (id) if at same default in laravel  (id)
+
+
+                4-  for test in web.php ( for get mobile from user  )  ==>
+                        Route::get('relation', function () {
+                            $user = User::find(2);
+                            // return  response() -> json($user); // // will return only user
+                            // return $user -> mobile ; // will return only phone
+                        });
+                        // OR
+                        Route::get('relation', function () {
+                            $user = User::with('mobile') -> find(2);
+                            return  response() -> json($user);
+                        });
+                        // OR
+                        Route::get('relation', function () {  // must create mobile relation in User model
+                            $user = User::with([ 'mobile' => function($filter) {
+                                $filter -> select("code" , "phone" , "user_id"); // user_id is must to run filter
+                            }]) -> find(2);  // if i want to hidden user_id make it in model   
+                            // OR
+                            // $user -> mobile -> makeVisible(["user_id"]); // Visible with this methods only if hidden in model
+                            // $user -> mobile -> makeHidden(["user_id"]);
+                            return  $user ;
+                        });
+
+
+                5-  for test in web.php ( for user from mobile (reversing)  )  ==>
+                        Route::get('relation', function () {    // must create user relation in Mobile model
+                            $mobile = Mobile::with('user') -> find(2);
+                            return $mobile;
+                        });
+
+
+                6-  important methods ( whereHas , whereDoesntHave )
+                        Route::get('relation', function () {     
+                            // $users = User::whereHas('mobile') -> get();  //OR  User::has("mobile")->get();
+                            // $users = User::whereDoesntHave('mobile') -> get();
+                            $users = User::whereHas('mobile') -> with("mobile") -> get();
+                            return $user;
+                        });
+                            
+
+
+            2-  One To Many
+            ------------------
+                ==> like every user has many comments
+                1-  create Model with migration file , this command ==>
+                    ==> php artisan make:model Comment -m
+                    ==> And in migration file 
+                        Schema::create('comments', function (Blueprint $table) {
+                            $table->string("comment");
+                            $table->integer("user_id");
+                        });
+
+
+                2-  in User Model ( users table is an main table) ==>
+                        ============================ Relations ==============================
+                        public function comments(){
+                            return $this->hasMany('App\Comment' , "user_id"  );
+                        }              
+                        // mean this class belonge to comment class and forgien key is user_id
+                        // we mustn't add forgien key (user_id) if at same default in laravel  ( offer_id , product_id ) with
+                        // we mustn't add local key (id) if at same default in laravel  (id)
+
+            
+                3-  in Comment Model ( comemnts table is an pranche of user ) ==>
+                        ============================ Relations ==============================
+                        public function user(){
+                            return  $this -> belongsTo("App\User") ;  
+                        }
+                        // mean this class belonge to comment class and forgien key is user_id
+                        // we mustn't add forgien key (user_id) if at same default in laravel  ( offer_id , product_id ) with
+                        // we mustn't add local key (id) if at same default in laravel  (id)
+
+                4-  same properties with Relation (One To One)
+
+                5-  for get table which is Many we must do loop 
+
+            
+            
+
+
+        2- Get Relation count
+        ------------------------
+
+            public function index()
+            {
+                $posts = Post::orderBy('id' , "desc") -> withCount('comments')->get();
+                return response() -> json( $posts );
+            }
+            // OR 
+            public function index()
+            {
+                $posts = Post::orderBy('id' , "desc") -> get();
+                foreach( $posts as $post ){
+                    $post -> setAttribute("comments_count" , $post -> comments-> count() );  
+                }
+                return response() -> json( $posts );
+            }
+            
+
+
+
+            
+
+        
+
+
+        
+        
+
+
+
+        
+
+        
+
+
+        
+   
+
+
+            
+    (49) Forgien key in Laravel migration
+    -------------------------------------------
+        we will create migraion "forgien_key" and do in it
+        
+        1- create migraion with this command ==> 
+            ==> php artisan make:migration create_forgienk_key_table
+
+        2- in main table id must be unsigned ==>
+            $table->unsignedBigInteger('product_id');
+
+
+        example: migration file add this code  
+        ---------------------------------------
+            public function up()
+            {
+                ============================  posts table ============================
+                Schema::table('posts', function (Blueprint $table) {
+                    /* =========== user_id ===============*/
+                    $table->foreign("user_id")
+                    ->references('id')
+                    ->on("users")
+                    ->onDelete("cascade")       
+                    ->onUpdate("cascade");  
+                    /* =========== category_id ===============*/ 
+                    $table->foreign("category_id")
+                    ->references('id')
+                    ->on("categories")
+                    ->onDelete("cascade")       
+                    ->onUpdate("cascade");     
+                });
+
+                ==============  comments table ============================
+                Schema::table('comments', function (Blueprint $table) {
+                    /* =========== user_id ===============*/
+                    $table->foreign("user_id")
+                    ->references('id')
+                    ->on("users")
+                    ->onDelete("cascade")       
+                    ->onUpdate("cascade");  
+                    /* =========== post_id ===============*/ 
+                    $table->foreign("post_id")
+                    ->references('id')
+                    ->on("posts")
+                    ->onDelete("cascade")       
+                    ->onUpdate("cascade");     
+                });
+            }
+
+
+         
+
+
+
+        
+
+
+
+         
+
+
+
+        
+
+
+
+         
+
+
+
+         
+
+
+
+        
+
+
+    (50) Seeding DB in Laravel
+    -------------------------------------------
+        => you can use laravel seeding for test DB
+        
+        1- for create seeder use this command ==>
+            ==> php artisan make:seeder OfferSeeder
+
+        2-  in OfferSeeder.php ==>
+                public function run()
+                {
+                    DB::table('categories')->create([  // OR insert method  
+                        "title" => "html tutorials",
+                        "slug" => "html-tutorials",
+                    ]);
+                    //OR
+                    Category::insert([  // for insert many records
+                        [
+                            "title" => "html tutorials",
+                            "slug" => "html-tutorials",
+                        ],
+                        [
+                            "title" => "css tutorials",
+                            "slug" => "css-tutorials",  
+                        ],
+                    ]);
+                    // OR 
+                    for( $i= 1 ; $i < 100 ; $i++  ){  // create loop 
+                        Category::create([  // OR insert method  
+                            "title" => "html tutorials",
+                            "slug" => "html-tutorials",
+                        ]);
+                    }
+                }
+
+        3-  Calling Seeders in main DatabaseSeeder may use the call method to execute additional seed classes.
+            in DatabaseSeeder.php ==>
+                public function run()
+                {
+                    $this->call(UserSeeder::class);
+                    $this->call(CategorySeeder::class);
+                    // OR 
+                    $this->call([ 
+                        UserSeeder::class ,
+                        CategorySeeder::class 
+                    ]);
+                }
+        
+        4-  to seed your database use this command ==>
+            ==> php artisan db:seed   // seed main file DatabaseSeeder
+            ==> php artisan db:seed --class=UserSeeder // with this class only
+            ==> php artisan migrate:fresh --seed  // fresh migration and seed DB
+
+
+        
+
+
+
+
+        
+
+
+
+        
+        
+
+
+
+        
+
+
+
+        
+
+
+
+
+        
+
+
+
+        
+
+
+
+    
+    (51) Faker in Laravel
+    -------------------------------------------
+        faker is class use to make fake sentences
+        important methods in Faker ==>
+        =>  $faker -> text(400)  // 400 num of letters
+        =>  $faker -> sentence(5)
+        =>  $faker -> name()
+        =>  $faker -> address()
+        =>  $faker -> dateTime()
+        =>  $faker -> title()  // for humans
+        =>  $faker -> company()
+        =>  $faker -> numberBetween(1,50) // 1,2,3,....50
+        =>  $faker -> email()     
+        =>  $faker -> safeEmail()  // @exmaple.
+        =>  $faker -> slug()  
+        =>  $faker -> ipv4          // '109.133.32.252' 
+        =>  $faker -> localIpv4     // '10.242.58.8'
+        =>  $faker -> ipv6          // '8e65:933d:22ee:a232:f1c1:2741:1f10:117c' 
+        =>  $faker -> macAddress    // '43:85:B7:08:10:CA'
+
+        ====> for example use faker in Seeders
+                use Faker\Factory as Faker;
+                public function run()
+                {
+                    $faker = Faker::create();
+                    for( $i= 1 ; $i < 100 ; $i++  ){
+                        Category::create([  // OR insert method  
+                            "title" => $faker ->text(400),
+                            "slug" => $faker ->text(400),
+                        ]);
+                    }
+                }
+
+
+
+
+
+        
+
+
+
+        
+
+
+
+        
+
+
+
+
+
+
+        
+
+
+
+
+        
+
+
+        
+
+
+
+    
+    (52) Factory in Laravel
+    -------------------------------------------
+        use to insert data in DB ( advanced insert )
+
+        1- to create factory use this command ==>
+            ==> php artisan make:factory CategoryFactory 
+
+        2-  create seeder use this command ==>
+            ==> php artisan make:seeder CategorySeeder
+
+        3- in CategoryFactory file add code ==>
+            use App\Models\Category;
+            $factory->define(Category::class, function (Faker $faker) {
+                return [
+                    "title" => "Hello Hello" ,
+                    "slug"  => "Hello Hello" ,
+                ];
+            });
+
+            // OR In Laravel 8 
+
+            public function definition()
+            {
+                return [
+                    'name' => $this->faker->name,
+                    'company_name' => $this->faker->sentence(2) ,
+                    'year' => now(),
+                    'company_headquarters' =>  $this->faker->sentence(10), 
+                    'what_company_does' => $this->faker->sentence(10),
+                ];
+            }
+
+
+        4- in CategorySeeder file add code ==>
+            public function run()
+            {
+                factory(App\Models\Category::class , 100 )->create();
+            }
+
+        5- to seed your database use this command ==>
+            ==> php artisan db:seed      // seed main file DatabaseSeeder
+            ==> php artisan db:seed --class=UserSeeder    // with this class only
+            ==> php artisan migrate:fresh --seed     // fresh migration and seed DB
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+
+
+
+        
+
+
+
+        
+
+
+
+        
+
+
+    (55) install vue in Laravel 
+    -----------------------------
+        visit link( https://laravel.com/docs/7.x/frontend ) 
+        
+        1-  laravel has many JavaScript or CSS pre-processors , Laravel uses NPM 
+            to install both of these frontend packages , to setup this modules ==>
+            ==> composer require laravel/ui
+
+        2- Once the laravel/ui package has been installed, you may install the frontend 
+            scaffolding using the ui Artisan command ==>
+
+            // Generate basic scaffolding...
+            ==> php artisan ui bootstrap
+            ==> php artisan ui vue
+            ==> php artisan ui react
+
+            // Generate login / registration scaffolding...
+            ==> php artisan ui bootstrap --auth
+            ==> php artisan ui vue --auth
+            ==> php artisan ui react --auth
+
+        3- npm install && npm run dev
+ 
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+
+
+
+        
+
+
+
+        
+
+
+
+        
+
+
+
+
+
+
+
+    (53) axios with Vue
+    -------------------------
+
+        ==> Axios is package in laravel to get,post... Api requests with vue.js
+
+        ==>  examples of methods :
+                axios.get("api/posts/store")   // note that method must be same in api
+                axios.post("api/posts/store" , this.post)
+                axios.put("api/posts/store" , this.post)
+                axios.patch("api/posts/store" , this.post)
+                axios.delete("api/posts/store")
+
+        ==> axios funcs must be inside methods:{} in vue.js component 
+                methods :{    // in methods in vue.js
+                    createPost(){
+                        axios.post("api/posts/store" , this.post)
+                        .then( response => console.log(response) )
+                        .then( error => console.log(error) );
+                    },
+                }
+
+        ==> for dynamic routes with vue.js
+                getPost(){
+                    // console.log( this.$route ) ; // for check route object
+                    axios.get("/api/posts/" + this.$route.params.slug )    
+                    .then( resquest => console.log(resquest) ) // if success request there console all request (test)
+                    .then( 
+                        resquest =>{  // if there success request 
+                            this.posts = resquest.data   // equale it with var posts in data
+                        }
+                    )
+                    .then( error => console.log(error) )
+                }
+
+        ==> tricks in route : ( for ex-> if i am in posts page )
+                axios.get("/api/posts/" + this.$route.params.slug )   // (http://laravelblog.com/api/posts/test-post)  start link( (/) -> to start link from begianing)   
+                axios.get("api/posts/" + this.$route.params.slug )   // (http://laravelblog.com/posts/api/posts/test-post) 
+
+        ==> you can use program "Postman" for test APIs 
+
+
+
+
+        
+
+
+
+        
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+
+    (54) Create vue component in laravel 
+    --------------------------------------
+
+        1- in resources/js/component create file.vue ( ExampleComponent) , with this structure ==>
+            <template>
+            
+            </template>
+            <script>
+                export default {
+                    
+                }
+            </script>
+            <style>
+            
+            </style>
+        
+        2- in resources/js/app.js register component ==>
+            Vue.component('latest-posts', require('./components/LatestPosts.vue').default);
+
+        3- to run auto npm  modules use this command ==>
+            ==> npm run watch
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+    (56) VueRouter with Laravel 
+    --------------------------------------
+        ==> for create SPA pages and easly browsing.
+
+        1- first install vue-router use this command ==>
+            ==>npm install vue-router
+
+        2-  we will use one blade and movement will be by components , 
+            so we will use only welcome blade file ==>
+                <!DOCTYPE html>
+                <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+                    <head>
+                        <meta charset="utf-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1">
+                        <title>Laravel</title>
+                        <!-- Fonts -->
+                        <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+                        <link rel="stylesheet" href="{{ asset("js/app.css") }}">
+                    </head>
+                    <body>
+                        <div id="app">
+                        </div>
+                        <script src="{{ asset("js/app.js") }}"></script>
+                    </body>
+                </html>
+
+        3-  create components in resources/js/components 
+                => CustomHeader   // try to avoid html5 tags ( dont use header )
+                => Posts
+                => Register
+                => Login
+
+        4-  in resources/js/app.js ( which i will include it in blade ) , 
+            delete all comments and example component  ==>
+                require('./bootstrap');      // use Bootstrap in project form node_modules
+                window.Vue = require('vue'); // use Vue.js in project form node_modules
+                import CustomHeader from "./components/CustomHeader.vue";  // import this component
+                const app = new Vue({
+                    el: '=app',
+                    components:{          // in this instace register component
+                        CustomHeader  
+                    }
+                });
+                // don't forget this command ==> npm run watch
+                //  add <custom-header></custom-header> in blade file to include header
+                //  when you visit balde this component will included
+
+        5-  in custom-header component add this template ==>
+                <template>
+                    <div class="container text-center">
+                        <router-link to="/login">login</router-link>  // <a> is default you can change tag=""
+                        <router-link to="/register">register</router-link>
+                        <router-link to="/posts">posts</router-link>
+                    </div>
+                </template>
+
+        6-  call vue-router in app.js file add code ==>
+                require('./bootstrap');      // use Bootstrap in project form node_modules
+                window.Vue = require('vue'); // use Vue.js in project form node_modules
+                // import Vue from 'vue' // use it if not used ==> window.Vue = require('vue'); 
+                import VueRouter from 'vue-router' // import vue router in project
+                Vue.use(VueRouter)   // use vue router
+                import CustomHeader from "./components/CustomHeader.vue";  // import this component
+                import Posts from "./components/Posts.vue";  // import this component
+                import Register from "./components/Register.vue";  // import this component
+                import Login from "./components/Login.vue";  // import this component
+                const routes = [    // here we put all info of component (which use as routes to SPA )  
+                    { path: '/posts', component: Posts },
+                    { path: '/register', component: Register },
+                    { path: '/login', component: Login }
+                ]
+                const router = new VueRouter({  // component which use as routes
+                    routes,
+                    mode: "history"   // to delete =hash from links 
+                })
+                const app = new Vue({
+                    el: '=app',
+                    router ,            // use router const (which as routes)
+                    components:{          // in this instace register component as normal componant
+                        CustomHeader ,
+                    }
+                });
+
+        7-  in web.php route ==> 
+                Route::get('/{any}', function () {  // if user reload in SPA not give error 404
+                    return view('welcome');
+                })->where([ "any" => ".*" ]);  // mean that if there any thing go to welcome view
+
+            =========================================================================================================
+            ================================ Advanced method ===============================================
+            =========================================================================================================
+            !!!!!! division code in files!!!!!!
+            1- create folder ( resources/js/routes ) and change components path to ../ ==>
+
+                import Posts from "../components/Posts.vue";  // import this component
+                import Register from "../components/Register.vue";  // import this component
+                import Login from "../components/Login.vue";  // import this component
+                const routes = [    // here we put all info of component (whice use as routes to SPA )  
+                    { path: '/posts', component: Posts },
+                    { path: '/register', component: Register },
+                    { path: '/login', component: Login }
+                ]
+                export default routes;  // when import this file return routes 
+
+
+            2- in ( resources/js/app.js ) ==>
+
+                require('./bootstrap');      // use Bootstrap in project form node_modules
+                window.Vue = require('vue'); // use Vue.js in project form node_modules
+                // import Vue from 'vue' // use it if not use window.Vue = require('vue'); 
+                import VueRouter from 'vue-router' // import vue router in project
+                Vue.use(VueRouter)   // use vue router
+                import CustomHeader from "./components/CustomHeader.vue";  // import this component
+                import routes from "./routes/routes"  // all routes in this file
+                const router = new VueRouter({  // component whice use as routes
+                    routes,
+                    mode: "history"   // to delete =hash from links 
+                })
+                const app = new Vue({
+                    el: '=app',
+                    router ,            // use router const (which as routes)
+                    components:{          // in this instace register component as normal componant
+                        CustomHeader ,
+                    }
+                });
+
+
+        8-  in blade file add this tags in =app ==>
+                <custom-header></custom-header>
+                <router-view></router-view>
+
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+        
+
+
+
+
+
+        
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+    (56) Crud System ( VueRouter with Laravel ) 
+    ---------------------------------------------------
+        !!!!!!!! Compelete prevous steps  !!!!!!!!!!
+
+        1- create model posts use this command ==>
+            ==> php artisan make:model Post -crmf
+            finish crud migration  ( title , body ) , seeder , factory for test
+
+
+        2- in api.php create route ==>
+            Route::resource("posts","Postcontroller")->except("create" , "edit" , "show");
+            use this command to know all routes ==>
+            php artisan route:list
+
+
+        3-  in Post.vue component add code in template ==>
+
+                <template>
+                    <div class="container">
+                    
+                        <!------------------------- Modal -------------------------->
+                        <div class="modal-container">
+
+                            <!-- Create Button Modal -->
+                            <button type="button" class="btn btn-success float-right" @click="setEditFalse" data-toggle="modal" data-target="=exampleModal">
+                                Create Post
+                            </button>
+
+                            <!-- Create Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel" v-if="edit" >Edit Post</h5>
+                                            <h5 class="modal-title" id="exampleModalLabel" v-else >Create Post</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="title">Title</label>
+                                                <input type="text" :class="['form-control' , errors.title ? 'is-invalid' : '' ]" name="title" id="title" placeholder="Type title..." v-model="post.title">
+                                                <small class="text-danger" v-if="errors.title"> {{errors.title[0] }} </small> 
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="body"> Post</label>
+                                                <textarea :class="['form-control' , errors.body ? 'is-invalid' : '' ]" name="body" id="body" rows="5" placeholder="What do you think ?!" v-model="post.body"></textarea>
+                                                <small class="text-danger" v-if="errors.body"> {{errors.body[0] }} </small> 
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal"> Close </button>
+                                            <button type="submit" v-if="edit" @click="updatePost()" class="btn btn-primary"> Edit </button>
+                                            <button type="submit" v-else @click="createPost" class="btn btn-primary"> Create </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!------------------------- Table ------------------------>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">=</th>
+                                    <th scope="col">title</th>
+                                    <th scope="col">body</th>
+                                    <th scope="col">Updata</th>
+                                    <th scope="col">delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="( post , index ) in posts" :key="post.id" >
+                                    <th scope="row"> {{ index + 1 }} </th>
+                                    <td>{{ post.title }}</td>
+                                    <td>{{ post.body }}</td>
+                                    <td> 
+                                        <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="=exampleModal" @click="editPost(post)">
+                                            Edit
+                                        </button>
+                                    </td>
+                                    <td> 
+                                        <button type="button" class="btn btn-danger" @click="deletePost(post)" >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <script>
+                export default {
+                    data(){
+                        return{
+                            posts: {},  // create empty object to insert posts in it to loooop 
+                            post:{  // create empty object and link it with v-model for create new post 
+                                title : '',
+                                body : '',
+                            },
+                            errors: {}, // create empty object to insert errors in it to show 
+                            edit : false // set this var to know if modal for create or edit
+                        }
+                    },
+                    mounted() {
+                        this.getPosts();
+                    },
+                    methods :{
+                        /*============== getPosts ==============*/
+                        getPosts(){
+                            axios.get("api/posts") // request method must be like method in Route in api.php
+                            .then( 
+                                resquest => {  // if there success request 
+                                    this.posts = resquest.data   // equale it with var posts in data 
+                                }
+                            )
+                            .then( error => console.log(error) );
+                        },
+                        /*============== createPost ==============*/
+                        setEditFalse(){
+                            this.edit  = false // set var edit equale 'false' to know that this modal for create
+                        },
+                        createPost(){
+                            axios.post("api/posts" , this.post)
+                            // .then( response => console.log(response) ) // to show response in console ( you can name it => req , requests )
+                            .then( 
+                                resquest => {  // if there success request 
+                                    // this.errors = resquest.data.errors  // equale it with var errors in data
+                                    if( resquest.data.status == "error" ){
+                                        this.errors = resquest.data.errors  // equale it with var errors in data
+                                    }else if( resquest.data.status == "saved" ){
+                                        this.posts.push(  // add post in posts array to show 
+                                            {
+                                                title : this.post.title,
+                                                body : this.post.body,   
+                                            }
+                                        ),
+                                        this.errors = {},  // empty error var
+                                        this.post = {   // empty post var
+                                            title : '',
+                                            body : '',
+                                        }
+                                    }
+                                }
+                            )
+                            .then( error => console.log(error) ); // to show error in console
+                        },
+                        /*============== UpdatePost ==============*/
+                        editPost(post){
+                            this.post = post // equale param with var post in data to bind it
+                            this.edit = true // set var edit equale 'ture' to know that this modal for edit
+                        },
+                        updatePost(){
+                            axios.put("api/posts/" + this.post.id , this.post)
+                            // .then( response => console.log(response) ) // to show response in console ( you can name it => req , requests )
+                            .then( 
+                                resquest => {  // if there success request 
+                                    if( resquest.data.status == "error" ){
+                                        this.errors = resquest.data.errors  // equale it with var errors in data
+                                    }else if( resquest.data.status == "saved" ){
+                                        this.errors = {},  // empty error var
+                                        this.post = {   // empty post var
+                                            title : '',
+                                            body : '',
+                                        }
+                                    }
+                                }
+                            )
+                            .then( error => console.log(error) ); // to show error in console
+                        },
+                        /*============== DeletePost ==============*/
+                        deletePost(post){
+                            if( confirm("Are You Sure ?") ){
+                                axios.delete("api/posts/" + post.id  )
+                                .then( 
+                                    resquest => {  // if there success request 
+                                        if( resquest.data.status == "deleted" ){
+                                            this.posts.splice( this.posts.indexOf(post), 1 );
+                                            this.errors = {},  // empty error var
+                                            this.post = {
+                                                title : '',
+                                                body : '',
+                                            }
+                                        }
+                                    }
+                                )
+                                .then( error => console.log(error) ); // to show error in console
+                            }
+                        }
+                    }
+                }
+                </script>
+
+        
+
+
+
+
+
+
+
+        
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+        
+
+
+
+
+
+        
+
+    (57) pagination Laravel & Vue
+    -------------------------------------
+        ==> using vue package to create pagination with APIs vue
+        visit link ( https://github.com/gilbitron/laravel-vue-pagination )        
+
+
+        1- install package use this command  ==> 
+            ==> npm install laravel-vue-pagination
+
+
+        2- in PostController must make api get paginate api ==>
+                $posts = Post::with("user")-> paginate(5);
+
+
+        3-  register pagination component in app.js ==> 
+                Vue.component('pagination', require('laravel-vue-pagination'));
+
+
+        4-  Now use pagination posts component / route  ==> 
+                //  posts -> must be object {} not array '' , [] 
+                //  getLatestPosts
+                <pagination :data="posts" @pagination-change-page="getLatestPosts" :limit="1" align="center" size="small"></pagination>
+
+
+        5- in posts component / route in   ==> 
+                getLatestPosts(page = 1){   // page require param and default is page = 1
+                    axios.get("/api/posts?page=" + page)    
+                    .then( resquest => console.log(resquest) )   
+                }
+
+
+        
+
+
+
+
+
+        
+
+
+        
+
+
+
+
+
+        
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+    (58) steps after clone laravel project from Github.com
+    ---------------------------------------------------------
+
+        1- after clone/download laravel project use this command to download laravel packages
+            ==> composer install  // OR  ==> composer update               // --ignore-platform-reqs
+
+        2- download vue.js/react.js node packages 
+            ==> npm install
+
+        3- set the basic config in .env file , because .env file not uploaded
+            ==> cp .env.example .env
+
+        4- not generate project key 
+            ==> php artisan key:generate
+
+        5- create DB in mysql with same name in env file then 
+            ==> php artisan migrate    
+
+        6- Compile the js code
+            ==> npm run dev
+                // OR
+            ==> npm run watch
+                // OR
+            ==> npm run production
+
+        7- run project 
+            ==> php artisan serve
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+        
+
+
+
+    (59) create admin assets  
+    -------------------------------
+        - if create folder in ( public -> admin ) , when we use it at route ==>
+            Route::get("admin" , function(){
+                return "Hello Admin";
+            });
+            will give error ( The requested resource /admin was not found on this server. )
+
+        2- so copy and move files  :
+            .htaccess  
+            favicon.ico  
+            index.php  
+            robots.txt 
+            web.config
+
+        3- edit path
+            require __DIR__.'/../../vendor/autoload.php';
+            $app = require_once __DIR__.'/../../bootstrap/app.php';
+
+        
+
+
+    
+
+
+        
+
+
+
+    
+
+
+        
+
+
+
+    
+
+
+        
+
+
+
+    (60) upload img ( Laravel & Vue )  
+    -------------------------------
+
+        - in Component ==> 
+
+            <template>
+
+                <form @submit.prevent=" edit ? updatePost() :  createPost() "  enctype="multipart/form-data"  >
+                    <!------ Post CSRF token ------>
+                    <input type="hidden" name="_token" :value="csrf">
+                    <!------ Post Image ------>
+                    <div class="form-group upload-input">
+                        <label for="post-img" v-else>  <i class="fas fa-cloud-upload-alt"></i> &nbsp; <span> Choose image... </span> </label> 
+                        <input type="file" id="post-img" class="form-control custom-file-input " name="img" @change="processImg($event)" >
+                    </div>
+                    <!------ Buttons ------>
+                    <div class="buttons float-right">
+                        <button class="btn btn-danger " data-dismiss="modal"> Close </button>
+                        <button type="submit" class="btn btn-primary ">  {{ edit ? 'Edit' : 'Save'}}  </button>
+                    </div>
+                </form>
+
+            </template>
+            <script>
+                export default {
+                    
+                    data(){
+                        return{
+                            post:{  // create empty object and link it with v-model for create new post 
+                                csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                title: '',
+                                img: '',
+                                category_id: '',
+                                body: '',
+                            },
+                        }
+                    },
+                    methods:{
+
+                        processImg( event ){  // at change input set post img name
+                            console.log( event.target.files[0]  ); // get info for file ( name , size , type..... )
+                            var fileReader = new FileReader() 
+                            fileReader.readAsDataURL( event.target.files[0] )
+                            fileReader.onload = (e) => {
+                                this.post.img = e.target.result
+                            }
+                        },
+
+                        /*=============== Create Post ================*/
+                        createPost(){
+                            axios.post("/api/admin/posts" , this.post)
+                            // .then( response => console.log(response) ) // to show response in console ( you can name it => req , requests )
+                            .then( 
+                                response => {  // if there success request 
+                                    if( response.data.status == "error" ){
+                                        this.errors = response.data.errors  // equale it with var errors in data
+                                    }
+                                }
+                            )
+                            .catch( error => console.log(error) ); 
+                        },
+                    }
+
+                }
+            </script>
+
+
+        - in Controller ==>
+            public function store(Request $request)
+            {
+
+                // $request->img  ==> data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABQAAAA+4CAYAAABKDTGh...........
+                $exploded = explode("," , $request->img); // part form ',' convert to array // $exploded[0] ==> data:image/png;base64
+                $decoded = base64_decode($exploded[1]);  // iVBORw0KGgoAAAANSUhEUgAABQAAAA+4CAYAAABKDTGh...........
+                if( str_contains( $exploded[0] , "jpeg" ) ) // get file extention
+                    $extention = "jpg";
+                else
+                    $extention = "png";
+                $fileName = time() . "." . $extention;
+                $path = 'images/posts' . '/' . $fileName;
+                file_put_contents( $path , $decoded);
+                return response() -> json([
+                    "status"   =>  'success' ,
+                ]);
+
+            }
+
+
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+       
+    (62) Laravel Api ( Create middleware ) 
+    ------------------------------------------
+        - we can create middleware in APIs to use it , 
+            middlewares not related with ( passport , jwt )
+
+
+        - CheckPassword middleware
+        ----------------------------------
+            - use this command ==>  php artisan make:middleware checkPassword
+
+            - Now register middleware in Kernel.php ( App\Http\Kernel.php )
+                    protected $routeMiddleware = [
+                        /*========== Custom Middleware ==========*/
+                        'checkPassword' => \App\Http\Middleware\checkPassword::class, // add this line
+                    ];   
+
+            - in App\Http\Middleware\checkPassword.php
+                public function handle($request, Closure $next)
+                {
+
+                    if( $request->api_password != "12345678" )
+                        return response() ->json([ 'mgs' => 'Unauthenticated' ]);
+
+                    return $next($request);
+                }
+
+            - in routes\api.php ==>
+                Route::apiResource('/ceo', 'Api\CEOController')->middleware('checkPassword');
+
+
+
+
+        - Switch language middleware
+        ----------------------------------
+            - use this command ==>  php artisan make:middleware ChangeLanguage
+
+            - Now register middleware in Kernel.php ( App\Http\Kernel.php )
+                    protected $routeMiddleware = [
+                        /*========== Custom Middleware ==========*/
+                        'ChangeLanguage' => \App\Http\Middleware\ChangeLanguage::class, // add this line
+                    ];   
+
+            - in ProductController.php
+                public function index()
+                {
+                    // $products = Product::get();
+                    $products = Product::select( 
+                        'id' ,
+                        'name_' . app()->getLocale() . ' as name',
+                    )->get();
+                    return response() -> json( $products );
+                }
+
+            - in App\Http\Middleware\ChangeLanguage.php
+                public function handle($request, Closure $next)
+                {
+                    if( isset( $request->lang ) && $request->lang == 'ar' )
+                        app() -> setlocale('ar');
+                    return $next($request);
+                }
+
+            - in routes\api.php ==>
+                Route::get('/products', 'Api\ProductController@index')->middleware('changeLanguage');
+
+
+
+        - some funcs with admin guard
+        ----------------------------------
+            ==> if( Auth::guard('admin')->check() ){  // check if there guard admin
+                    return redirect('admin/overview');
+                }
+
+            ==>  Auth::guard('admin')->name   // get admin name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+
+    (62) Laravel Passport
+    -------------------------------
+
+        official Documentation:
+        -----------------------------------
+            ( https://laravel.com/docs/7.x/passport )
+
+
+        Custom Documentation:
+        -----------------------------------
+            ( https://www.twilio.com/blog/build-secure-api-php-laravel-passport ) // 
+            ( https://www.toptal.com/laravel/passport-tutorial-auth-user-access=:~:text=Laravel%20Passport%20is%20an%20OAuth,on%20an%20OAuth%202.0%20server. )
+            
+
+        Test project laravel passport in Github:
+        ------------------------------------------
+            (https://github.com/Abdullrahman22/laravel-passport)
+        
+
+  
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+    (63) register vue component in Laravel
+    ----------------------------------------------
+
+
+        1- bacis register 
+        ---------------------------       
+            Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+
+
+
+        2- using import
+        ---------------------------------       
+            import ExampleComponent from './components/ExampleComponent.vue'
+
+            new vue({
+                components:{
+                   ExampleComponent 
+                }
+            })
+
+
+        3- auto register vue components
+        ---------------------------------       
+            /**
+            * The following block of code may be used to automatically register your
+            * Vue components. It will recursively scan this directory for the Vue
+            * components and automatically register them with their "basename".
+            *
+            * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
+            */
+
+            const files = require.context('./', true, /\.vue$/i)
+            files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+    (64) Traits in Laravel
+    -------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+        
+
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+        
+        
+
+    (65) Laravel JWT
+    -------------------------------
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+     
+
+    (66) Laravel Validator Class
+    -------------------------------
+        
+        add custom error
+        ------------------
+            return response() -> json([
+                "status" => "error",
+                "msg" => "validation error",
+                "errors" => $validator->getMessageBag()->add('email', "user isn't exist")
+            ], 422 );
+        
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (67) Laravel Hash Class
+    -------------------------------
+
+        - create hash 
+        -----------------------
+            $hash = Hash::make('secret');  // to create Bcrypt code 
+
+
+        - check hash 
+        -----------------------
+            $input = 'secret'; 
+            if(Hash::check($input, $hash)){ // to check Bcrypt code 
+                // the input matches the secret
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (68) Laravel Echo
+    ---------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (68) Laravel live serve
+    ---------------------------
+        - visit (https://github.com/bangnokia/laravel-serve-livereload)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (69) Pusher In Laravel
+    ---------------------------
+
+        - after login, create new app  
+        
+        - select a cluster with same in .env file
+        
+        - copy app information and paste it in .env file
+        
+        - in .env file ==> 
+            BROADCAST_DRIVER=pusher
+
+        - unComment Broadcast class in comfig/app.php
+            ==> App\Providers\BroadcastServiceProvider::class
+        
+        - run command ==> composer require pusher/pusher-php-server
+
+        - create event use command ==> php artisan make:event NewNotification
+
+        - in namespace 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (70) make public folder as root in Laravel?  
+    ---------------------------------------------------------
+
+        - You just need to cut index.php and .htaccess from public directory and paste it in the root directory,
+        that's all and replace two lines in index.php as
+
+
+            ==> require __DIR__.'/bootstrap/autoload.php';
+            ==> $app = require_once __DIR__.'/bootstrap/app.php';
+
+
+            - and in .htaccess file add this line 
+
+
+                <IfModule mod_rewrite.c>
+                    RewriteRule ^(.*)$ public/$1 [L]      // public ==> mean to public folder
+                </IfModule>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    !!!!!!!!!!! Dont forget go to php Anonymous for
+    1- test validator types
+    2- request from links 
+    3- visit post link
+    4- tinker 
+    6- mail
+    7- file upload validator
+    8- DB methods ( latest , random ) 
+        
+        
+
+
+
+        

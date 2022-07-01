@@ -1,0 +1,77 @@
+My Documentation For Ajax :   
+----------------------------
+
+
+
+
+
+
+
+    (1) Config
+    -----------------------
+        - jquey cdn must be 
+
+
+
+
+
+    (2) Ajax Formation
+    -----------------------
+        
+        
+        $.ajax({
+            type: "POST",   // OR  ==> GET
+            url: "includes/ajax/send_files.php",   // OR  ==> link in laravel
+            data: new FormData( $(" .content-icon ")[0] ),  
+            processData: false,       // use with upload imgs and forms
+            contentType : false ,     // use with upload imgs and forms
+            cache    : false,         // use with upload imgs and forms
+            success: function ( data ) {
+                console.log(data);
+            },
+            error: function(feedback){
+                alert("Error");   // failed to with url
+            }
+        });
+
+
+
+    (3) Ajax data 
+    -----------------------
+        $.ajax({
+            type: "POST",
+            url: "{{ url('products/store') }}",
+            data: { 
+                "_token"      : "{{ csrf_token() }}" , 
+                "name"        : $(".signup-form input[name='name']").val() ,
+                "description" : $(".signup-form input[name='description']").val() ,
+                "price"       : $(".signup-form input[name='price']").val() ,
+                "category"    : $(".signup-form input[name='category']").val() ,
+            },
+            success: function ( data ) {
+                console.log(data);
+            },
+            error: function(feedback){
+                alert("Error");   // failed to with url
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var formData = new FormData();
+    formData.append('id', id);
+    formData.append('photo', photo);

@@ -1,0 +1,105 @@
+
+
+My Documentation For Basics Javascript :   
+---------------------------------------
+
+
+
+
+
+
+
+
+
+
+    (1) JSON.parse() && JSON.stringify()
+    =======================================
+
+        - JSON.parse()
+        -----------------
+            !!!    to convert todos from 'string' to 'object'       !!!
+
+            <p id="demo"> </p>
+            <script>
+                var txt = '{"name":"John", "age":30, "city":"New York"}'  // note that its 'string'
+                var obj = JSON.parse(txt);
+                document.getElementById("demo").innerHTML = obj.name + ", " + obj.age;
+            </script>
+
+
+
+
+        - JSON.stringify()
+        -----------------
+            !!!    to convert todos from 'object' to 'string'      !!!
+
+            <p id="demo"> </p>
+            <script>
+                var obj = { name: "John", age: 30, city: "New York" }   // note that its 'object'
+                var myJSON = JSON.stringify(obj);
+                document.getElementById("demo").innerHTML = myJSON;
+            </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (2) 
+    =======================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (3) 
+    =======================================

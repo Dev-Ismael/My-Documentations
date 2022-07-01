@@ -1,0 +1,4418 @@
+My Documentation For Sass :   (  https://vuejs.org/ ) 
+----------------------------
+
+
+
+
+
+
+
+
+
+
+ 
+
+    (1) simple Install and tools 
+    ----------------------------------
+
+
+        Direct <script> Include in projects folders
+        -------------------------------------------------
+            there is two versions of vue.js 
+            1- "Development Version"  With full warnings and debug mode    // at working and development
+            2- "Production Version"  Warnings stripped, 33.30KB min+gzip   // at uploading project
+
+
+        Include CDN
+        ----------------
+            - For prototyping or learning purposes, you can use the latest version with ==>
+                <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+            - specific version number ==>
+                <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+
+            - If you are using native ES Modules ==> 
+                <script type="module">
+                import Vue from 'https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.esm.browser.js'
+                </script>
+
+
+        install NPM
+        ----------------
+            NPM is the recommended installation method when building large scale applications
+            , So to install vue use this command ==> 
+            ==> npm install vue
+
+
+        install by CLI
+        ------------------
+            ==> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (2) install Vue extention 
+    ----------------------------------
+
+        1- form google extention download vue extention
+
+        2- after install vue extention give this messege( Vue.js not detected ) , 
+            because its not working in protocol file "Vue.js not detected" , so 
+
+        3- right click at extention -> manage extention -> "turn on" Allow access to file URLs
+
+        // OR
+
+        4- use live server extention it won't use protocol file
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (3) Creating a Vue Instance 
+    -----------------------
+        For extent from vue class and  Vue instance not contact with other    
+        Ex ==>
+            <p class="app"> {{ name}} </p>
+            <p class="app2"> {{ name}} </p>
+
+            <script src="vue.js"></script>
+            <script type="module">
+            new Vue({          // OR var vm = new Vue()
+                'el' : ".app",    // you can write if 'el':{}  OR el:{}  
+                
+                'data': {
+                    name: "abdullrahman"
+                }
+            });
+            new Vue({
+                'el' : ".app2",
+                
+                'data': {
+                    name: "marwam"
+                }
+            });
+            </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (4) Options passed to a Vue object 
+    --------------------------------------
+        new Vue({          // OR var vm = new Vue()   vm mean vue model
+        
+            'el':{
+                // selector of element like css selector
+            }
+            'data':{
+                // allows to pass a set of reactive data that will be used by the Vue app.
+                // All reactive properties must be added at initialization time, you can’t add new ones later.  
+            },
+            'methods':{
+                // a set of methods that are defined on the Vue instance.
+            },
+            'computed':{
+                // like methods, but cached internally.
+            },
+            'watch':{
+                // allows to watch properties, and call a function when they change.
+            },
+            'props':{
+                // it’s a set of attributes that are exposed to parent components as input data.
+            },
+            'propsData':{
+                // default data for props. Only useful during testing
+            },
+            'created':{
+
+            },
+            'mounted':{
+
+            },
+
+        });
+        
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (5) el in Vue Instance 
+    --------------------------------------
+        - el is selector of element like css selector
+
+        - example el in vue instance ==>
+            <div class="app"> // el:{   }   OR    // 'el':{    }
+                <p> {{ name }} </p>
+            </div>
+            new Vue({
+                el : ".app",  // select element class 'app'
+            });
+
+
+
+
+        
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (6) Data in Vue Instance 
+    --------------------------------------
+        - data may be (string , int , boolean , array , object , null) ==>
+            data: {   
+                newTodoText: '',
+                visitCount: 0,
+                hideCompletedTodos: false,
+                todos: [],
+                error: null
+            }
+
+        - use data of vue instance ==>
+            var vm = new Vue({
+                data: {
+                    a: 600
+                }
+            })
+            alert(vm.a);  // -> 600
+
+
+        - example data in vue instance ==>
+            <div class="app"> 
+                <p> {{ name }} </p>
+            </div>
+            new Vue({
+                el : ".app",
+                data: {   //   data:{   }   OR    // 'data':{    }
+                    name: "ahmed"
+                },
+            });
+
+        - use data in vue instance using oop js ==>
+
+            <div class="app">
+                <button @click="alertNow"> Click Here! </button>
+            </div>
+            new Vue({
+                el : ".app",
+                data: {
+                    name: "ahmed"
+                },
+                methods: {
+                    alertNow(){
+                        alert(" Hello " + this.name);  // this.  mean in this vue instance
+                    }
+                },
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (7) methods in Vue Instance 
+    --------------------------------------
+    
+        - methods look like functions in vanilla javascript
+
+        - function in methods can write with diffirent ways 
+            alertNow(){
+            },
+            //OR
+            alertNow: function(){
+            },
+            //OR
+            'alertNow': function(){
+            }
+
+        - example data in vue instance ==>
+
+            <div class="app">
+                <button @click="alertNow"> Click Here! </button>
+            </div>
+            new Vue({
+                el : ".app",
+                methods: {    // methods:{   }   OR    // 'methods':{    }
+                    alertNow(){
+                        alert("Hello");
+                    }
+                },
+            });
+
+
+        - call methods inside html tag with () or not  
+            <p> sayHello() </p>    <!--- function to alert say hello -->
+
+
+        - call methods in attributes ( bind , v-on ) html  with () or not  
+            <button @click="alertNow"> Click Here! </button>
+            <button @click="alertNow()"> Click Here! </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (8) computed in Vue Instance 
+    --------------------------------
+        - computed is same with methods but it cache properties and if call this 
+           functions many time or use functions a lote it run for first time only
+
+        - computed not accepted params like methods and call like property 'data
+
+        - example computed in Vue Instance =>  
+            <div class="app">
+                <p> {{ myAge() }} </p>
+                <p> {{ myAge() }} </p>
+                <p> {{ myAge() }} </p>
+                <p> {{ myAge() }} </p>
+                <p> {{ myAge() }} </p>
+                <p> {{ myAge() }} </p>
+                <p> {{ firstName }} </p>   <!-- if firstName changed ( v-model ) all vue instance will reload with methods -->
+            </div>
+                
+            new Vue({
+                el : ".app",
+                data: {
+                    age: 23,   
+                    firstName: "abdullrahman", 
+                    lastName:  "ismael", 
+                    address: "Elwarsha street Bla Bla Bla Bla Bla Bla ", 
+                },
+                methods: {    
+                    myAge(){
+                        console.log("run");
+                        return this.age * 2 ;  <!-- if age changed all vue instance will reload with methods -->
+                    }
+                },
+            });
+
+
+        - another example computed in Vue Instance =>  
+            <div class="app">
+                <h3>Search in languages</h3>
+                <input type="text" v-model="findLanguage" />
+                <ul>
+                    <li v-for="lang in filterLanguages"> {{ lang }} </li> <!-- loop with computed as data property we can't do it in methods -->
+                </ul>
+            </div>
+            new Vue({
+                el : ".app",
+                data: {
+                    findLanguage: "",
+                    languages: [
+                        "Html",
+                        "Css",
+                        "JavaScript",
+                        "Jquery",
+                        "Sass",
+                        "PHP",
+                        "Mysql",
+                        "Ajax",
+                        "Laravel",
+                        "Vue",
+                    ]
+                },
+                computed: {
+                    filterLanguages(){
+                        var filtering = new RegExp( this.findLanguage , 'i' );  // 'i' mean case insenetive (write capital or small) 
+                        return this.languages.filter( function (el) {
+                            return el.match(filtering);  
+                        });
+                    }
+                },
+            });
+
+
+        - another example computed in Vue Instance =>  
+            <div class="app">
+                <input type="text" v-model="username">
+                <p> {{ validateUsername }} </p>
+            </div>
+            var vm = new Vue({
+                el: ".app",
+                data: {
+                    username: "",
+                    age: 23,
+                },
+                computed: {
+                    validateUsername(){
+                        if( !this.username ){
+                            return "Username can't be empty";
+                        }else if( this.username.length < 8 ){
+                            return "Username must be more 8";
+                        }else if( !isNaN( this.username ) ){
+                            return "Username can't be only numbers ";
+                        }else{
+                            return "Hello " + this.username + "your age is " + this.age ;
+                        }
+                    }
+                },
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (9) watch in Vue Instance 
+    --------------------------------------
+        - watch in vue is "watch property or data and one value is changed do an action or logic"
+
+        - watch is functions runs without call it at event (watch and run it auto)
+
+        - watch in vue make use able to make functions in data 
+
+        - example computed in Vue Instance =>  
+
+            <h2> Egyption Pounds </h2>
+            <input type="text" v-model="eg">
+            <h2> Saudi Riyal </h2>
+            <input type="text" v-model="sar">
+
+            var vm = new Vue({
+                el: ".app",
+                data:{
+                    eg: "",
+                    sar: "",
+                },
+                watch: {
+                    eg(value){     // value of eg
+                        this.sar = value / 5
+                        // console.log("eg run");
+                    },
+                    sar(value){     // value of eg
+                        this.eg = value * 5
+                        // console.log("sar run");   // console wil run 3 times ( 1- for change eg model / 2- for change sar value in opration / 3- for change eg value in opration )
+                    },
+                },
+            });
+
+
+        - another example computed in Vue Instance =>  
+
+
+        <h2> Second </h2>
+        <input type="text" v-model="second">
+        <h2> Minute </h2>
+        <input type="text" v-model="minute">
+        <h2> Hour </h2>
+        <input type="text" v-model="hour">
+
+        var vm = new Vue({
+            el: ".app",
+            data:{
+                second: "",
+                minute: "",
+                hour: "",
+            },
+            watch: {
+                second(value){     // value of second
+                    this.minute = value / 60
+                    // this.hour = value / 3600  // i can change hour value in this func but it connects with minute() func
+                    // console.log("second run");
+                },
+                minute(value){     // value of minute
+                    this.second = value * 60
+                    this.hour = value / 60
+                    // console.log("minute run");
+                },
+                hour(value){     // value of hour
+                    // this.second = value * 3600  // i can change second value in this func but it connects with minute() func
+                    this.minute = value * 60
+                    // console.log("hour run");
+                },
+                
+            },
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (10) Vue Directives  
+    --------------------------
+
+        1- v-html  v-text 
+        =========================
+            !! for not conflict in print with laravel for example !
+
+            - example for v-text ==>
+            -------------------------
+                <ul class="class1">
+                    <li v-text="name"> </li>   // <h2> Hello </h2>
+                </ul>
+                var vm = new Vue({
+                    'el' : ".class1",
+                    'data' : {
+                        'name' : '<h2> Hello </h2>'
+                    },
+                });
+
+
+
+            - example for v-html ==>
+            -------------------------
+                <ul class="class1">
+                    <li v-html="name"> </li>   // Hello
+                </ul>
+                var vm = new Vue({
+                    'el' : ".class1",
+                    'data' : {
+                        'name' : '<h2> Hello </h2>'
+                    },
+                });
+
+
+
+
+
+
+
+        * =============================================================== *
+        2- Directive v-bind  
+        =========================
+            ==> it use with attr to make attr dynamic with data 
+
+
+            - example for v-bind ==>
+            -------------------------
+                <a class="class1" :href="link"> Google </a>   // you can do maths opration in v-bind ==> :href="link + 'ahmed'"
+                //OR
+                <a class="class1" v-bind:href="link"> Google </a>
+                var vm = new Vue({
+                    'el' : ".class1",
+                    'data' : {
+                        'link' : 'http://www.google.com'
+                    },
+                });
+
+
+
+            - example2 for v-bind ==>   
+            -------------------------
+                div{
+                    width: 100px;
+                    height: 100px;
+                    background-color:darkslateblue;
+                }
+                .red{
+                    background-color: crimson;
+                }
+                <div class="app">
+                    <div class="shadow" :class="{red : active}"></div>
+                    <br>
+                    <button @click="active =! active "> Toggle </button>
+                </div>
+                <script src="vue.js"></script>
+                <script>
+                    var vm = new Vue({
+                        el: ".app",
+                        data:{
+                            active: true ,
+                        },
+                    });
+                </script>
+
+
+
+            - example3 for v-bind ==> 
+            -------------------------  
+                <style>
+                    .app div{
+                        width: 100px;
+                        height: 100px;
+                        background-color:darkslateblue;
+                        overflow: hidden;
+                    }
+                    .red{
+                        background-color: crimson !important;
+                    }
+                    .shadow{
+                        box-shadow: -1px 1px 8px 0px #4c4747;
+                    }
+                    .border-radius{
+                        border-radius: 10px ;
+                    }
+                </style>
+
+                <div class="app">
+                    <div :class="objClass"></div>
+                    <button @click="color =! color ">  Toggle color </button>
+                    <button @click="shadow =! shadow "> Toggle shadow </button>
+                    <button @click="border =! border "> Toggle border </button>
+                </div> 
+                               
+                var vm = new Vue({
+                    el: ".app",
+                    data:{
+                        color: true,
+                        shadow: true,
+                        border: true,
+                    },
+                    computed: {     //  cant be method because we want to cache properties and them do some oprarions
+                        objClass(){
+                            return { red: this.color , shadow: this.shadow , 'border-radius' : this.border  }  // array or object {} , [] for add many classes in v-bind
+                        }
+                    },
+                });
+
+
+
+        * =============================================================== *
+        3- Directive v-for loop
+        =========================
+            ==> !! for use in arrays and objects
+
+
+            - example in v-for ==>
+            ----------------------
+                <ul class="class1">
+                    <li v-for='num in 20'> {{ num }} </li>
+                </ul>
+                
+
+
+
+            - example2 in v-for ==>
+            ----------------------
+                <ul class="class1">
+                    <li v-for='name in names'> {{name}} </li>
+                </ul>
+                var vm = new Vue({
+                    'el' : ".class1",
+                    'data' : {
+                        'names' : ["aya" , "mona" , "mai"]
+                    },
+                });
+
+
+            - example2 in v-for ==>
+            ----------------------
+
+                <div class="app">
+                    <div v-for="(item , key , index ) in user" :key="index">
+                        {{ key + ': ' + item}}
+                    </div>
+                </div>
+                var vm = new Vue({
+                    el : ".app",
+                    data : {
+                        user: { 
+                            name: 'Abdullrahman' ,
+                            age: "23"
+                        },
+                        
+                    },
+                });
+
+
+            - example3 in v-for ==>
+            ----------------------
+
+                <ul class="class1">
+                    <li v-for='( name , index ) in names'> {{ index + " ==> " + name}} </li>
+                </ul>
+                var vm = new Vue({
+                    'el' : ".class1",
+                    'data' : {
+                        'names' : ["aya" , "mona" , "mai"]
+                    },
+                });
+
+
+            - example4 in v-for ==>   // v-for with objects
+            ----------------------
+
+                <div class="app">
+                    <div v-for="(user , index ) in users" :key="user.age">  
+                        name : {{ user.name }} and Age : {{ user.age }}
+                    </div>
+                </div>
+                var vm = new Vue({
+                    el : ".app",
+                    data : {
+                        users:[ 
+                            { name: 'Abdullrahman' , age: "23"},
+                            { name: 'ahmed' , age: "12"},
+                            { name: 'mohamed' , age: "52"},
+                            { name: 'ali' , age: "61"},
+                            { name: 'aya' , age: "41"},
+                            { name: 'noha' , age: "83"},
+                        ]
+                    },
+                });
+
+
+            - example5 in v-for ==>   // pointed :key importance
+            ----------------------
+                <!---- note that key must be uniqe for best preformance with any edition -->
+
+                <style>
+                    p{
+                        display: block;
+                        border: 2px solid black;
+                    }
+                    .error{
+                        border: 2px solid red;
+                    }
+                </style>
+                <div class="app">
+                    <p v-for="user in users" class="user" :key="user.id"> {{ user.name }} </p>    
+                    <button @click="reverseUsers"> Reverse Users List </button>
+                    <button @click="addErrorClass"> Add Error Class </button>
+                </div>
+                var vm = new Vue({
+                    el : ".app",
+                    data : {
+                        users: [
+                            { id: 1 , name: "ahmed" , age: 24 } ,
+                            { id: 2 , name: "osama" , age: 79 } 
+                        ]
+                    },
+                    methods: {
+                        reverseUsers: function(){
+                            return this.users.reverse();
+                        },
+                        addErrorClass: function(){
+                            document.querySelector(".user").classList.add("error");
+                        }
+                    },
+                });
+
+
+            - example6 in v-for ==> 
+            ----------------------
+
+                <div class="app">
+                    <input type="text" placeholder="Add Name..." v-model="newName">
+                    <button @click="addName"> + Add </button>
+                    <br>
+                    <br>
+                    <div v-for="(name , index ) in names" :key="index">
+                        <span> {{ index + "  =>  " + name }} </span> 
+                        <button @click="deleteName(index)"> X </button>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+                var vm = new Vue({
+                    el : ".app",
+                    data : {
+                        newName: '',
+                        names: [ 'Ahmed' , 'Mona' , 'Ali' ,'Mohamed' ,'Abdullrahman' , 'Esraa' ]
+                    },
+                    methods: {
+                        addName(){
+                            this.names.push( this.newName );
+                            this.newName = " ";
+                        },
+                        deleteName(index){   
+                            this.names.splice( index , 1 );
+                        }
+                    },
+                });
+
+
+
+            - example8 in v-for ==>     // filter using loop
+            ----------------------
+                !!!! we can use computed and it will be better bacause it will cash basic array !!!!
+                <div class="app">
+                    <p v-for="number in DivideBy2(numbers)" > {{ number }} </p>
+                </div>
+                var vm = new Vue({
+                    el : ".app",
+                    data : {
+                        numbers: [ 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 ]
+                    },
+                    methods: {
+                        DivideBy2: function (numbers){
+                            return numbers.filter( function( num ){
+                                return num % 2 == 0 ;
+                            });
+                        }
+                    },
+                });
+
+
+
+
+
+        * ========================================================================== *
+        4- Directive v-if || v-else-if || v-else 
+        =========================================
+
+            ==> !! note that you dont have any seprators between elementes.
+
+            - example in v-if ==>
+            -------------------------
+
+                <div class="app">
+                    <h2 class="class1" v-if="name == 'abdullrahman'"> Hi Abdullrahman nice  </h2>
+                    <h2 class="class1" v-else-if="name">  {{ name }} we don't know you </h2>
+                    <h2 v-else> sorry no name</h2>
+                </div>
+                var vm = new Vue({
+                    'el' : ".app",
+                    'data' : {
+                        'name' : 'ahemd'
+                    },
+                });
+
+
+            - example2 in v-if ==> // instead of using parent div to set v-if we can use template
+            -------------------------
+
+                <div class="app">
+                    <template v-if="name">  <!------  instead of using parent div  ------>
+                        <div> div 1 </div>
+                        <div> div 2 </div>
+                        <div> div 3 </div>
+                    </template>
+                </div>
+                <script>
+                    var vm = new Vue({
+                        'el' : ".app",
+                        'data' : {
+                            'name' : 'ahemd'
+                        },
+                    });
+                </script>
+
+
+
+
+
+
+        * =============================================================== *
+        5- Directive v-once
+        =====================
+            ==> it mean that dont update this element again make it static
+
+            - example in v-once ==>
+            -------------------------
+
+                <h2 class="class1" v-once> 
+                    {{ name }}
+                </h2>
+                var vm = new Vue({
+                    'el' : ".class1",
+                    'data' : {
+                        'name' : 'Ahmed'
+                    },
+                });
+
+
+
+
+
+        * =============================================================== *
+        6- Directive v-show
+        ======================
+            ==> like v-if but it but put element in body and give him display: none
+
+
+            - example in v-once ==>
+            -------------------------
+
+                <div class="app">
+                    <p v-show="name"> paragragh </p>
+                    <p v-show="! name"> else paragragh </p>  <!---- instead else-if="" ---->
+                </div>
+                var vm = new Vue({
+                    'el' : ".app",
+                    'data' : {
+                        'name' : ''
+                    },
+                });
+
+
+
+
+        * =============================================================== *
+        7- Directive v-on with events
+        ================================
+
+
+            - example in v-on ==>
+            -------------------------
+
+                <div class="class1">
+                    <h3> {{ counter }} </h3>
+                    <button @click="increaseCounter()"> Click Here </button>
+                        OR
+                    <button v-on:click="increaseCounter()"> Click Here </button>
+                </div>
+                var vm = new Vue({
+                    'el' : ".class1",
+                    'data' : {
+                        'counter' : 0
+                    },
+                    "methods" : {
+                        "increaseCounter" : function (){
+                            return this.counter++ ;
+                        },
+                    }
+                });
+
+
+
+
+
+        * =============================================================== *
+        8- Directive v-model
+        ---------------------
+            it use with input , texteara , select
+
+            - example in v-model ==>
+            -------------------------
+
+                <div class="class1">
+                    <input type="text" v-model="myName">
+                    <h2> {{ myName }} </h2>
+                </div>
+                var vm = new Vue({
+                    'el' : ".class1",
+                    'data' : {
+                        'myName' : "AbdullRahman",
+                    },
+                });
+
+
+
+
+
+        * =============================================================== *
+        9- create custom Directive 
+        --------------------------
+            - Docs: (https://vuejs.org/v2/guide/custom-directive.html)
+
+            - at first you must know more info about Directive
+
+            - ex: <button v-on:click.prevent="alertNow"> Click Here! </button>
+                    button    ==> element
+                    v-on      ==> directive
+                    click     ==> arrgument
+                    prevent   ==> modifier
+                    alertNow  ==> "binding" value or code todo
+               
+            - custom directive params:
+                1-  el ==> element which directive on it // we can edit it by ( style , animation ) by javascript 
+                2-  binding ==> value or code todo
+
+            - custom directive hooks:
+                bind: function (el) {  // called only once, when the directive is first bound to the element
+                    
+                },
+                inserted: function (el) {  // called when the bound element has been inserted into its parent root 
+                    
+                },
+                update: function (el) { // called after the containing component’s VNode has updated
+                    
+                },
+
+
+            - example: use el param 
+            --------------------------
+                <div class="app">
+                    <p v-color> Hello World </p>
+                </div>
+                Vue.directive("color",{
+                    inserted(el){
+                        console.log(el);
+                        // OR
+                        el.style.color = "red";
+                    }
+                })
+                new Vue({
+                    el: ".app",
+                })
+
+
+            - example: use el & binding param 
+            --------------------------------------
+                <div class="app">
+                    <p v-color="'red'"> Hello World </p>
+                    <p v-color="'green'"> Hello World </p>
+                </div>
+                Vue.directive("color",{
+                    inserted(el , binding){
+                        console.log(binding);
+                        // OR
+                        el.style.color = binding.value;
+                    }
+                })
+                new Vue({
+                    el: ".app",
+                })
+
+
+            - example: use modifier in custom directive 
+            ----------------------------------------------
+                <div class="app">
+                    <p v-color.border="'red'"> Hello World </p>
+                </div>
+                Vue.directive("color",{
+                    inserted(el , binding){
+                        if( binding.modifiers.border ){  // mean ==> if binding.modifiers.border == true
+                            el.style.borderColor = binding.value;
+                            el.style.borderStyle = "solid" ;
+                        } 
+                    }
+                })
+                new Vue({
+                    el: ".app",
+                })
+
+
+            - example: use arrgument in custom directive
+            ----------------------------------------------
+                <div class="app">
+                    <p v-color:bg.border="'red'"> Hello World </p>
+                </div>
+                Vue.directive("color",{
+                    inserted(el , binding){
+                        console.log(binding);
+                        if( binding.arg == "bg" ){  // mean ==> if binding.modifiers.border == true
+                            el.style.backgroundColor = binding.value ;
+                        } 
+                    }
+                })
+                new Vue({
+                    el: ".app",
+                })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (11) method in vue.js 
+    -----------------------
+        ==> method is function in javascript
+
+        <div class="app">
+            <button @click="alertNow"> Click Here! </button>
+        </div>
+        
+        var vm = new Vue({
+            el : ".app",
+            methods: {
+                alertNow: function() {    // alerrtNow(){}
+                    alert("goood");
+                }
+            },
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (12) Vue 'event' object   
+    ------------------------------------
+
+
+        - event object give us info of event like ( screenX , screenY , srcElement )                                                                                                     )
+
+        - example: Vue event object (button)
+        -------------------------------------
+            <div class="app">
+                <button @click="alertNow($event)"> Click Here! </button>  
+                // OR 
+                <button v-on:click="alertNow($event)"> Click Here! </button>  
+            </div>
+
+            var vm = new Vue({     
+                el : ".app",
+                methods: {
+                    alertNow: function(events) {  // optional any name but in html code ($event) is required 
+                        alert("goood");
+                        console.log(events);  // console event object
+                    }
+                },
+            });
+
+
+        - example: Vue event object (input)
+        -------------------------------------
+            <div class="app">    
+                <input type="text" @input="consolNow" >    <!----- (events.target.value) ==> input value ----->
+            </div>
+            new Vue({
+                el: ".app",
+                data:{
+					val: ''
+				},
+				methods: {
+					consolNow: function(events) {  // optional any name but in html code ($event) is required 
+                        console.log(events.target.value);  // console event object
+                    }
+				},
+            })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (13) Vue Modifiers
+    ------------------------------------
+        - Modifiers is modify event action 
+        Visit docs (https://vuejs.org/v2/guide/events.html#Event-Modifiers)
+
+            .stop           // stopPropagation() 
+            .prevent        // preventDefault()
+            .capture
+            .self
+            .once
+            .passive
+
+
+            example: for preventDefault Modifier
+            ----------------------------------------
+                <form @submit="preventNow">
+                    <input type="text" placeholder="type name..."/>
+                    <button> Submit </button>
+                </form>
+                var vm = new Vue({
+                    el : ".app",
+                    methods: {
+                        preventNow(event){
+                            event.preventDefault();
+                        }
+                    },
+                });
+
+                // OR modify event action in same html line
+
+                <form @submit.prevent >
+                    <input type="text" placeholder="type name..."/>
+                    <button> Submit </button>
+                </form>
+                var vm = new Vue({
+                    el : ".app",
+                    methods: {
+                        
+                    },
+                });
+
+
+            example: for stopPropagation Modifier
+            ----------------------------------------
+                <div class="app">
+                    <div @mouseover="parentHover" class="parent" style="background-color: rgb(177, 177, 14); width: 200px; height: 200px;" >
+                        <div @mouseover="childHover" class="child" style="background-color: red; width: 100px; height: 100px;"></div>
+                    </div>
+                </div>
+                var vm = new Vue({
+                    el : ".app",
+                    methods: {
+                        parentHover(){
+                            console.log("hover parent");
+                        },
+                        childHover(event){
+                            event.stopPropagation();
+                            console.log("hover child");
+                        },
+                    },
+                });
+
+            // OR modify event action in same html line
+
+                <div class="app">
+                    <div @mouseover="parentHover" class="parent" style="background-color: rgb(177, 177, 14); width: 200px; height: 200px;" >
+                        <div @mouseover.stop="childHover" class="child" style="background-color: red; width: 100px; height: 100px;"></div>
+                    </div>
+                </div>
+                var vm = new Vue({
+                    el : ".app",
+                    methods: {
+                        parentHover(){
+                            console.log("hover parent");
+                        },
+                        childHover(event){
+                            console.log("hover child");
+                        },
+                    },
+                });
+
+
+            example: for .self Modifier
+            -----------------------------
+                <div class="app">
+                    <div @click.self="parentClicked" class="parent" style="background-color: rgb(177, 177, 14); width: 200px; height: 200px;" >
+                        <div @click="childClicked" class="child" style="background-color: red; width: 100px; height: 100px;"></div>
+                    </div>
+                </div>
+                var vm = new Vue({
+                    el : ".app",
+                    methods: {
+                        parentClicked(event){
+                            console.log("hover parent");
+                        },
+                        childClicked(){
+                            console.log("hover child");
+                        },
+                    },
+                });
+
+
+            example: for .once Modifier
+            --------------------------------
+                <div class="app">
+                    <div @click.once="parentClicked" class="parent" style="background-color: rgb(177, 177, 14); width: 200px; height: 200px;" >
+                        <div @click="childClicked" class="child" style="background-color: red; width: 100px; height: 100px;"></div>
+                    </div>
+                </div>
+                var vm = new Vue({
+                    el : ".app",
+                    methods: {
+                        parentClicked(){
+                            console.log("hover parent");
+                        },
+                        childClicked(){
+                            console.log("hover child");
+                        },
+                    },
+                });
+
+
+            example: for .capture Modifier   // reverse child with parent in console
+            ---------------------------------
+                <div class="app">
+                    <div @click.capture="parentClicked" class="parent" style="background-color: rgb(177, 177, 14); width: 200px; height: 200px;" >
+                        <div @click="childClicked" class="child" style="background-color: red; width: 100px; height: 100px;"></div>
+                    </div>
+                </div>
+                var vm = new Vue({
+                    el : ".app",
+                    methods: {
+                        parentClicked(){
+                            console.log("hover parent");
+                        },
+                        childClicked(){
+                            console.log("hover child");
+                        },
+                    },
+                });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (14) Key Modifiers  
+    ------------------------------------
+        - visit dosc ( https://vuejs.org/v2/guide/events.html#Key-Modifiers )
+        - When listening for keyboard events, we often need to check for specific keys. 
+        
+        - Key Modifiers : 
+            .enter     // OR .13 using keycode
+            .tab       // OR .9 using keycode
+            .delete (captures both “Delete” and “Backspace” keys)
+            .esc
+            .space
+            .up
+            .down
+            .left
+            .right
+
+        - you can use keyCode in events
+            <input v-on:keyup.13="submit">
+
+        Example ==> Key Modifiers .enter
+
+            <div class="app">
+                <input v-on:keyup.enter="handlekey" >
+                // OR
+                <input v-on:keyup.13="handlekey">  <!-- you can use keycode -->
+            </div>
+            new Vue({
+                el : ".app",
+                methods: {
+                    handlekey(event){
+                        console.log(event)
+                    }
+                },
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (15) Key Modifiers  ( shortcuts in keyboard )
+    -----------------------------------------------
+        - You can use the following modifiers to trigger mouse or keyboard event listeners only 
+            when the corresponding modifier key is pressed:
+
+            .ctrl
+            .alt
+            .shift
+            .meta
+
+            Example ==> Key Modifiers .enter
+
+            <!-- Alt + C -->
+            <input v-on:keyup.alt.67="clear">
+            // OR 
+            <!-- Ctrl + Click -->
+            <div v-on:click.ctrl="doSomething">Do something</div>
+            new Vue({
+                el : ".app",
+                methods: {
+                    handlekey(event){
+                        console.log(event)
+                    }
+                },
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (16) Components in Vue
+    =================================
+
+        1- Options passed to a Vue component
+        -------------------------------------
+ 
+            Vue.component('button-counter', {   
+                template: '',            // required in Vue component
+                data: function () {      // data in component as function {   data()    //OR     data: function ()   //OR    'data': function ()    }
+                    return {
+                        count: 0
+                    }
+                },                               // props can't changed in methods opration ==> size++                  
+                props: ['size', 'myMessage'] ,   // prop put in component template ==> <param-demo size="100"></param-demo>  
+                methods:{ 
+
+                },
+                computed:{
+
+                }
+            })
+        * =============================================================== *
+        2- Vue component syntax
+        -------------------------------------
+
+            - example: Vue component syntax ==>
+                Vue.component('button-counter', { // Options passed to a Vue component  })
+
+            - component name must be small and not have any spaces, if component name
+                must contain many words use " - " like { button-counter , product-info }
+
+            - component name can be camalCase shap { buttonCounter , productInfo } and at
+                call it html { button-counter , product-info }
+
+            - use it in html <button-counter></button-counter>
+
+            - components must be before vue instance to be global can use it in any vue instance
+                Vue.component('button-counter', {  
+                    template: ' <button v-on:click="count++"> You clicked me {{ count }} times. </button> ' ,
+                    data: function () {
+                        return {
+                            count: 0
+                        }
+                    },
+                })
+                var vm = new Vue({
+                    el: ".app",
+                });
+
+            - if want to use component in specific Vue component ==>
+
+                var vm = new Vue({
+                    el: ".app",
+                    components: {
+                        tag:{
+                            template: '<button v-on:click="count++"> You clicked me {{ count }} times. </button>' ,
+                            data: function () {
+                                return {
+                                    count: 0
+                                }
+                            },
+                        }
+                    }
+                }); 
+                // And in Html 
+                <tag></tag>
+        * =============================================================== *
+        3- mixture html codes with component
+        -----------------------------------------
+
+            - some html tags must contain specific tags 
+                <table>
+                    <tr></tr>
+                </table>
+
+            - so use is="" at default tags
+                Vue.component('tag', {
+                    template: '<div> Test </div>',         
+                })
+                var vm = new Vue({
+                    el: ".app",
+                }); 
+                // And in Html 
+                <div class="app">
+                    <table>
+                        <tr is="tag"></tr>
+                    </table>
+                </div>
+
+        * =============================================================== *
+        4- using props in Vue Component
+        -----------------------------------
+            - component name must be small and not have any spaces, if component name
+                must contain many words use " - " like { button-counter , product-info }
+
+            - example: props in Vue Component ==>
+            ------------------------------------------
+                <div class="app">
+                    <porduct name="LapTop" price="150 EG"></porduct>
+                    <porduct name="PC" price="300 EG"></porduct>
+                </div>
+                Vue.component('porduct', {
+                    template: '<div> Product name : {{ name }}  , Price: {{ price }} </div>', 
+                    props: [ "name" , "price" ]        
+                })
+                var vm = new Vue({
+                    el: ".app",
+                }); 
+
+        * =============================================================== *
+        5- use Vue instance data in props
+        -------------------------------------
+            - we can use Vue instance data in props using v-bind:
+
+            - example: Vue instance data in props ==>
+            ------------------------------------------
+                <div class="app">
+                    <porduct :name="name" :price="price"></porduct>
+                    //OR
+                    <porduct v-bind:name="name" v-bind:price="price"></porduct>
+                </div>
+                Vue.component('porduct', {
+                    template: '<div> Product name : {{ name }}  , Price: {{ price }} </div>', 
+                    props: [ "name" , "price" ]        
+                })
+                var vm = new Vue({
+                    el: ".app",
+                    data: {
+                        name: "LapTop",
+                        price: "150 EG"
+                    }
+                }); 
+                
+        * =============================================================== *
+        6- Props validation  
+        -----------------------------------
+
+            - we can make validation in props component 
+
+            - first convert props : from array [] ==> object {}
+                Vue.component('porduct', {
+                    template: '<div> Product name : {{ name }}  , Price: {{ price }} </div>', 
+                    props: {
+                        name: {},
+                        price: {}
+                    }      
+                })
+                var vm = new Vue({
+                    el: ".app",
+                }); 
+
+            - props types in vue component ==>
+                props: {
+                    title: String,
+                    price: Number,   // at number must be bind in html :price=""
+                    isPublished: Boolean,
+                    commentIds: Array,
+                    author: Object,
+                    callback: Function,
+                    contactsPromise: Promise // or any other constructor
+                }
+
+            - another validation in props ==>
+                props: {
+                    name: required: ture ,  // OR false
+                    price : default: 0,     // default value if prop not found in component tag
+                }
+
+            - another validation in props ==>
+                props: {
+					name: {},
+					price: { type: Number , validator: function(value){
+						return value > 100
+					}},
+				}   
+                
+                
+        * =============================================================== *
+        7- pass vue instance object to props 
+        -------------------------------------
+            
+            - example: pass vue instance object to props :
+            ---------------------------------------------
+                <div class="app">
+                    <porduct :users-data="users"></porduct>   // bind usersData 'component props' with 'users' object in vue instance
+                </div>
+                Vue.component('porduct', {
+                    template: '<div> Product name : {{ usersData.name }}  </div>', 
+                    props: {
+                        usersData: {},
+                    }      
+                })
+                var vm = new Vue({
+                    el: ".app",
+                    data:{
+                        users: {
+                            id: 3 ,
+                            name: "AbdullRahman",
+                        },
+                    }
+                }); 
+
+
+            - example: loop vue instance object in component :
+            ---------------------------------------------
+                <div class="app">
+                    <porduct v-for="user in users" :users-data="user"></porduct>
+                </div>
+                Vue.component('porduct', {
+                    template: '<div> Product name : {{ usersData.name }}  </div>', // can't create loop in component template
+                    props: {
+                        usersData: {},
+                    }      
+                })
+                var vm = new Vue({
+                    el: ".app",
+                    data:{
+                        users: [
+                            { 
+                                id: 2 ,
+                                name: "ahmed",
+                            },
+                            { 
+                                id: 3 ,
+                                name: "AbdullRahman",
+                            },
+                        ]
+                    }
+                }); 
+                
+        * =============================================================== *
+        8- loop vue instance object to props 
+        -------------------------------------
+
+            - example: loop vue instance object to props
+            -----------------------------------------------
+                <div class="app">
+                    <porduct v-for="user in users" :users-data="user"></porduct>
+                </div>
+                Vue.component('porduct', {
+                    template: '<div> Product name : {{ usersData.name }}  </div>', 
+                    props: {
+                        usersData: {},
+                    }      
+                })
+                var vm = new Vue({
+                    el: ".app",
+                    data:{
+                        users: [
+                            { 
+                                id: 2 ,
+                                name: "ahmed",
+                            },
+                            { 
+                                id: 3 ,
+                                name: "AbdullRahman",
+                            },
+                        ]
+                    }
+                }); 
+
+
+        * =============================================================== *
+        9- composing component 
+        -------------------------------------
+
+            - example: simple two components pass vue instance object to props
+            ------------------------------------------------------------------
+                <div class="app">
+                    <user v-for="user in users" :users-data="user"></user>
+                    <hr>
+                    <product v-for="product in products" :products-data="product"></product>
+                </div>
+                Vue.component('user', {
+                    template: '<div> User name : {{ usersData.name }}  </div>', 
+                    props: {
+                        usersData: {},
+                    }      
+                })
+                Vue.component('product', {
+                    template: '<div> Product name : {{ productsData.title }}  </div>', 
+                    props: {
+                        productsData: {},
+                    }      
+                })
+                var vm = new Vue({
+                    el: ".app",
+                    data:{
+                        users: [
+                            { 
+                                id: 2 ,
+                                name: "ahmed",
+                            },
+                            { 
+                                id: 3 ,
+                                name: "AbdullRahman",
+                            },
+                        ],
+                        products: [
+                            { 
+                                id: 1 ,
+                                title: "LapTop",
+                            },
+                            { 
+                                id: 2 ,
+                                title: "FiFa2020",
+                            },
+                        ],
+                    }
+                }); 
+
+
+            - example2: simple composing components 
+            --------------------------------------------
+                <div class="app">
+                    <user  v-for="user in users" :users-data="user"></user>
+                </div>
+                Vue.component('user', {
+                    template:   ' <div> <hi></hi> {{usersData.name}} </div> ' ,
+                    props: {
+                        usersData: {},
+                    }      
+                })
+                Vue.component('hi', {
+                    template:  '<span> Hello </span>'
+                })
+                var vm = new Vue({
+                    el: ".app",
+                    data:{
+                        users: [ 
+                            {
+                                id: 1 ,
+                                name: "abdullrahman",	
+                            },
+                            {
+                                id: 2 ,
+                                name: "Ahmed",	
+                            },
+                            {
+                                id: 3 ,
+                                name: "Mohamed",	
+                            },
+                        ]
+                    }
+                }); 
+
+
+            - example3: composing components  
+            --------------------------------------------
+                <div class="app">
+                    <product :products-data="product"></product>
+                </div>
+                Vue.component('user', {
+                    template: '<div> Username : {{ usersData.username }}  </div>', 
+                    props: {
+                        usersData: {},
+                    } 
+                })
+                Vue.component('product', {
+                    template: '<div> Product name : {{ productsData.title }} ' +
+                                ' <user :users-data="productsData.user">  </user>  </div>', 
+                    props: {
+                        productsData: {},
+                    } 
+                })
+                var vm = new Vue({
+                    el: ".app",
+                    data:{
+                        product:{
+                            id: 1 ,
+                            price: "2500 LE",
+                            title: "LapTop",
+                            user:{
+                                id: 2,
+                                username: "AbdullRahman"
+                            }
+                        }
+                    }
+                }); 
+                
+        * =============================================================== *
+        10- call between components ( parent , child )
+        -------------------------------------------------
+
+            - at sending data ( parent ==> child ) Use -> "props"
+            - at sending data ( child ==> parent ) Use -> "emit event"
+
+
+            first create simple component :
+            -----------------------------------
+                <div class="app">
+                    <counter-button></counter-button>
+                </div>
+                Vue.component('counter-button' , {
+                    template: ' <button @click="increaseCounter"> Counter is {{ counter }} </button> ' ,
+                    data(){
+                        return{
+                            counter: 0
+                        }
+                    },
+                    methods:{
+                        increaseCounter(){
+                            return this.counter ++
+                        }
+                    }
+                });
+                var vm = new Vue({
+                    el: ".app",
+                }); 
+
+
+
+            example : create custom event to send data to parent "root"
+            ------------------------------------------------------------
+                <div id="app">
+                    Root variable {{changeTimes}} <br>
+                    <button-counter v-on:increament="count"></button-counter>
+                </div>
+                Vue.component('button-counter', {
+                    template: '<button @click="increament()"> Component variable {{counter}}</button>',
+                    data: function(){
+                        return {
+                            counter: 0
+                        }
+                    },
+                    methods:{
+                        increament:function(){
+                            this.counter ++;
+                            this.$emit('increament');
+                        }
+                    }
+                });
+                new Vue({
+                    'el':'#app',
+                    data: {
+                        changeTimes: 0
+                    },
+                    methods: {
+                        count: function(){
+                            this.changeTimes ++;
+                        }
+                    }
+                });
+                
+
+
+
+            example : share data with many components using $emit (Vue cli)
+            ----------------------------------------------------------------
+
+
+                - in couterInfo.vue ==>
+                    <template>
+                        <div>
+                            Counter: {{counter}}
+                        </div>
+                    </template>
+                    <script>
+                    export default {
+                        props: ["counter"],
+                    }
+                    </script>
+
+
+                - in info.vue ==>
+                    <template>
+                        <div>
+                            <h2>Info</h2>
+                            <counterInfo :counter="counter"></counterInfo>
+                        </div>
+                    </template>
+                    <script>
+                        import counterInfo from "./counterInfo";
+                        export default {
+                            props: ["counter"],
+                            components: {
+                                counterInfo
+                            }
+                        }
+                    </script>
+
+
+                - in counter.vue ==>
+                    <template>
+                        <div>
+                            <h2>Counter</h2>
+                            Counter: {{counter}}
+
+                            <button @click="increase">Increase</button>
+                            <button @click="decrease">Decrease</button>
+                        </div>
+                    </template>
+                    <script>
+                        export default {
+                            props: ["counter"],
+                            methods: {
+                                increase (){
+                                    this.$emit('increase'); // create root emit
+                                },
+                                decrease (){
+                                    this.$emit('decrease'); 
+                                }
+                            }
+                        }
+                    </script>
+
+
+                - in App.vue ==>
+                    <template>
+                    <div id="app">
+                        <counter 
+                            :counter="counter"
+                            v-on:increase="increase" 
+                            v-on:decrease="decrease">
+                        </counter>
+                        <info :counter="counter" ></info>
+                    </div>
+                    </template>
+                    <script>
+                        import counter from "./components/counter";
+                        import info from "./components/info";
+                        export default {
+                            name: 'app',
+                            data(){
+                                return {
+                                    counter: 0
+                                }
+                            },
+                            methods: {
+                                increase(){
+                                    this.counter ++;
+                                },
+                                decrease(){
+                                    this.counter --;
+                                }
+                            },
+                            components: {
+                                counter,
+                                info
+                            }
+                        }
+                    </script>
+        * =============================================================== *
+        11- events 'v-on' in component
+        -------------------------------------------------
+
+            !!!! to click in component we must add Modifiers 'native' !!!
+
+            <div class="app">
+                <counter-button @click.native="alertNow"></counter-button>
+            </div>
+			Vue.component('counter-button' , {
+				template: ' <button> Click Here </button> ' ,
+			});
+			var vm = new Vue({
+				el: ".app",
+				methods: {
+					alertNow(){
+						alert("Goooooooooood");
+					}
+				},
+			}); 
+                
+        * =============================================================== *
+        12- .sync modifier
+        -------------------------------------------------
+
+
+
+
+
+
+
+
+                
+        * =============================================================== *
+        13- pass html in component using 'slot'
+        ------------------------------------------
+
+            - example: simple slot
+            -------------------------- 
+                <div class="app">
+                    <tag> ( slot content ) </tag>
+                </div>
+                Vue.component('tag', {
+                    template: '<div> test <slot></slot> </div>',
+                });
+                new Vue({
+                    el: ".app",
+                })
+
+            - example: default content slot
+            -------------------------------- 
+                <div class="app">
+                    <tag>   </tag>
+                </div>
+                Vue.component('tag', {
+					template: '<div> test <slot> default if not found content </slot> </div>',
+				});
+				new Vue({
+					el: ".app",
+				})
+  
+        * =============================================================== *
+        14- Component slot names
+        ------------------------------------------
+            !!!! using if have many slots !!!!
+            <div class="app">
+                <tag> 
+                    <div slot="header"> header Content </div> <!--- slot header --->
+                </tag>
+            </div>
+            Vue.component('tag', {
+                template: 
+                `<div>
+                    <header> <slot name="header"> defult header Content </slot> </header>
+                    <main>   <slot name="main"> defult main Content </slot>   </main>
+                    <footer> <slot name="footer"> defult footer Content </slot> </footer>
+                </div>`,
+            });
+            new Vue({
+                el: ".app",
+            })
+                
+        * =============================================================== *
+        15- daynamic components 
+        ------------------------------------------
+            !!!! to switch between components !!!
+                <div class="app">
+                    <button @click="switchComponent()"> Switch Now! </button>
+                    <component :is="componentName"></component>
+                </div>
+                Vue.component('first-component', {
+					template: " <div> first-component </div> "
+				});
+				Vue.component('second-component', {
+					template: " <div> second-component </div> "
+				});
+				new Vue({
+					el: ".app",
+					data:{
+						componentName: "first-component"
+					},
+					methods: {
+						switchComponent(){
+							if( this.componentName ==  "first-component" )
+								return this.componentName  =  "second-component" ;
+							elseif( this.componentName ==  "second-component" )
+								return this.componentName  =  "first-component" ;
+						}
+					},
+				})
+                
+        * =============================================================== *
+        16- make daynamic components keep live
+        ------------------------------------------
+            !!!!! make component keep it data if i switch not loaded form beginer !!!!!
+                <div class="app">
+                    <br>
+                    <button @click.prevent="activeFirst"> first Component </button>
+                    <button @click.prevent="activeSecond"> second Component </button>
+                    <br>
+                    <keep-alive>   <!--use keep-alive to save opration in evey components -->
+                        <component :is="activeComponent"></component>
+                    </keep-alive>
+                </div>
+                Vue.component('first-component', {
+                    template: " <div @click='increaseCounter' > first-component <button> Click To Increase Counter: {{ counter }} </button> </div> ",
+                    data(){
+                        return{
+                            counter: 0
+                        }
+                    },methods: {
+                        increaseCounter(){
+                            return this.counter ++
+                        }
+                    },
+                });
+                Vue.component('second-component', {
+                    template: " <div> second-component </div> "
+                });
+                new Vue({
+                    el: ".app",
+                    data:{
+                        activeComponent: "first-component"
+                    },
+                    methods: {
+                        activeFirst(){
+                            this.activeComponent = "first-component"
+                        },
+                        activeSecond(){
+                            this.activeComponent = "second-component"
+                        }
+                    },
+                })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (17) Vue.js life hooks 
+    =================================
+
+        - visit link( https://vuejs.org/images/lifecycle.png )
+
+        - example: Vue.js life hooks
+        ------------------------------
+            new Vue({
+                el: '#app',
+                beforeCreate: function() {
+                    console.log("beforeCreate()")
+                },
+                created: function() {
+                    console.log("created()")
+                },
+                beforeMount: function() {
+                    console.log("beforeMount()");
+                },
+                mounted: function() {
+                    setTimeout(function(){console.log("mounted()")}, 3000);
+                },
+                beforeUpdate: function() {
+                    console.log("beforeUpdate()")
+                },
+                updated: function() {
+                    console.log("updated()")
+                },
+                beforeDestroy: function() {
+                    console.log("beforeDestroy()")
+                },
+                destroyed: function() {
+                    console.log("destroyed()")
+                },
+            })
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (18) http requests in Vue.js 
+    =================================
+        - use this site for test json Api (http://jsonplaceholder.typicode.com)
+
+
+        1- axios libarary
+        ----------------------
+
+
+
+
+
+
+        * =============================================================== *
+        2- vue resources libarary 
+        ---------------------------------
+            - visit link( https://github.com/pagekit/vue-resource )
+
+            - example: vue resources
+            ------------------------------
+                <div class="app">
+                    <button @click="getPosts"> Click To Load Posts !</button>
+                    <br>
+                    <post v-for="post in posts" :id="post.id" :title="post.title" :body="post.body" ></post>
+                </div>
+                Vue.component("post" , {
+                    template: `
+                        <div>
+                            <h2> #{{ id }} {{ title }}</h2>
+                            <p> Post body: {{ body }}</p>
+                            <hr>
+                        </div>
+                    `,
+                    props: [ "id" , "title" , "body" ]
+                })
+                new Vue({
+                    el: ".app",
+                    data:{
+                        posts: []
+                    },
+                    methods:{
+                        getPosts(){
+                            this.$http.get('http://jsonplaceholder.typicode.com/posts').then(response => {
+                                // get body data
+                                this.posts = response.body;
+                            }, response => {
+                                // error callback
+                                alert("Error");
+                            });
+                        }
+                    }
+                })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (19) Forms in Vue.js 
+    =================================
+
+
+        1- v-model with inputs
+        --------------------------
+
+            <div class="app">
+                <input type="text" v-model="username">
+                {{ username }}
+            </div>
+            new Vue({
+                el: ".app",
+                data:{
+                    username: "" 
+                }
+            })
+
+
+
+        * =============================================================== *
+        2- v-model with radio
+        ----------------------------
+
+            <div class="app">
+                <label > Your best browser </label>
+                <br>
+                <label for="google" > Google Chrome </label>
+                <input type="radio" id="google" value="Google Chrome" v-model="browser"> <!--- we can't use name="" so use same value in v-model="" --->
+                <br>
+                <label for="opera"> Opera </label>
+                <input type="radio" for="opera" value="Opera" v-model="browser">
+                <br>
+                <label for="firefox"> Fire Fox </label>
+                <input type="radio" for="firefox" value="Fire Fox" v-model="browser">
+            </div>
+            new Vue({
+                el: ".app",
+                data:{
+                    browser: "Google Chrome"  // defualt value
+                }
+            })
+
+
+
+
+        * =============================================================== *
+        3- v-model with checkbox
+        ----------------------------
+
+            example: checkbox v-model 
+            ---------------------------------
+
+                <div class="app">
+                    <label > Do you accept terms ?? </label>
+                    <input type="checkbox" value="accept_terms" v-model="accept_terms">
+                </div>
+                new Vue({
+                    el: ".app",
+                    data:{
+                        accept_terms: true  // true ==> checked
+                    }
+                })
+
+
+            example: checkbox v-model group
+            ---------------------------------
+                <div class="app">
+                    <label > which browser you prefer ?? </label>
+                    <input type="checkbox" value="google" v-model="browser">
+                    <input type="checkbox" value="opera" v-model="browser">
+                </div>
+                new Vue({
+                    el: ".app",
+                    data:{
+                        browser: []  
+                    }
+                })  
+
+
+
+        * =============================================================== *
+        4- v-model with select
+        ----------------------------
+
+            example: select v-model 
+            ---------------------------------
+                <div class="app">
+                    <label > which browser you prefer ?? </label>
+                    <select v-model="browser">
+                        <option value="google"> Google Chrome </option>
+                        <option value="opera"> Opera </option>
+                        <option value="firefox"> FireFox </option>
+                    </select>
+                </div>
+                new Vue({
+                    el: ".app",
+                    data:{
+                        browser: ''  // you can put defualt option "google"
+                    }
+                })
+
+
+            example: select v-model multiple
+            ---------------------------------
+
+                <div class="app">
+                    <label > which browser you prefer ?? </label>
+                    <select v-model="browser" multiple>
+                        <option value="google"> Google Chrome </option>
+                        <option value="opera"> Opera </option>
+                        <option value="firefox"> FireFox </option>
+                    </select>
+                </div>
+                new Vue({
+                    el: ".app",
+                    data:{
+                        browser: []  // you can put defualt option ["google","opera"] 
+                    }
+                })
+
+
+            example: select v-model & loop  
+            ---------------------------------
+
+                <div class="app">
+                    <label > which browser you prefer ?? </label>
+                    <select v-model="browser">
+                        <option v-for="option in options" :value="option.value"> {{ option.browserTitle }}</option>
+                    </select>
+                </div>
+                new Vue({
+                    el: ".app",
+                    data:{
+                        options: [
+                            { browserTitle: 'Google Chrome' , value: 'google'} ,
+                            { browserTitle: 'Opera' , value: 'opera'} ,
+                            { browserTitle: 'FireFox' , value: 'firefox'} ,
+                        ],
+                        browser: ""
+                    }
+                })
+
+
+
+        * =============================================================== *
+        4- v-model with input file 
+        ----------------------------
+            - You can’t, because it does not make sense. v-model would try to set the “value” of the input,
+                which is not possible for file inputs. Also, you would have to process the 
+                FileList Object anyway.
+            
+            example:  
+            ---------------------------------
+
+            <input type="file", @change="processFile($event)">
+            methods: {
+                processFile(event) {
+                    this.someData = event.target.files[0]
+                }
+            }
+
+
+
+
+
+
+        * =============================================================== *
+        5- Forms Modifier in Vue.js "lazy"  
+        -----------------------------------
+            !!!!! lazy Modifier make v-model work after focus out input !!!!
+            <div class="app">
+                <input type="text" v-model.lazy="username">
+                {{ username }}
+            </div>
+            new Vue({
+                el: ".app",
+                data:{
+                    username: "" 
+                }
+            })
+
+        * =============================================================== *
+        6- Forms Modifier in Vue.js "number"  
+        -----------------------------------
+
+            !!!!! number Modifier make v-model number always int not string !!!!
+            <div class="app">
+                <input type="text" v-model.number="age">
+                {{ age }}
+            </div>
+            new Vue({
+                el: ".app",
+                data:{
+                    age: "" 
+                }
+            })
+
+        * =============================================================== *
+        7- Forms Modifier in Vue.js "trim"  
+        -----------------------------------
+
+            !!!!! trim Modifier make v-model remove spaces from input !!!!
+            <div class="app">
+                <input type="text" v-model.trim="username">
+                {{ username }}
+            </div>
+            new Vue({
+                el: ".app",
+                data:{
+                    username: "" 
+                }
+            })
+
+        * =============================================================== *
+        8- Forms events in Vue.js   
+        --------------------------
+
+            example: @change event  
+            ---------------------------------
+                !!!!! at focus out or clicked enter after finish , or at select in option , radio , checkbox !!!!
+
+                <div class="app">
+                    <input type="text" @change="valChanged"  v-model="username">
+                    {{ username }}
+                </div>
+                new Vue({
+                    el: ".app",
+                    data:{
+                        username: "" 
+                    },
+                    methods: {
+                        valChanged(){
+                            console.log("valChanged");
+                        },
+                    },
+                })
+
+            example: @input event  
+            ---------------------------------
+                !!!!! at writing at input as "keyup" !!!!
+                <div class="app">
+                    <input type="text" @input="valInput" v-model="username">
+                    {{ username }}
+                </div>
+                new Vue({
+                    el: ".app",
+                    data:{
+                        username: "" 
+                    },
+                    methods: {
+                        valInput(){
+                            console.log("valInput");
+                        }
+                    },
+                })
+
+
+            example: @submit event in Form  
+            ---------------------------------
+                <div class="app">
+                    <form @submit.prevent="submitForm">
+                        <input type="text">
+                        <input type="submit">
+                    </form>
+                </div>
+                new Vue({
+                    el: ".app",
+                    data:{
+                        username: "" 
+                    },
+                    methods: {
+                        submitForm(){
+                            console.log("submitForm");
+                        },
+                    },
+                })
+
+        * =============================================================== *
+        9- How v-model works in Vue.js   
+        ---------------------------------
+
+            <div class="app">
+                <input type="text" v-model="valInput">
+                <input type="text" :value="valInput"  @input=" valInput = $event.target.value " >
+                <br>
+                <br>
+                <input type="text" v-model.lazy="valChange">
+                <input type="text" :value="valChange"  @change=" valChange = $event.target.value " >
+            </div>
+            new Vue({
+                el: ".app",
+                data:{
+                    valInput: '' ,
+                    valChange: '' ,
+                },
+            })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (20) Filter in Vue.js 
+    =================================
+        !!!!! filters is used for built in functions in javascript !!!
+
+        example: Filter in Vue.js 
+        ---------------------------------
+            <div class="app">
+                <p> {{ name.toUpperCase() }} </p>  <!--- Old method in Javascript --->
+                <p> {{ name | upperCase }} </p>
+                <p> {{ name | dupplicate }} </p>
+                <p> {{ name | upperCase | dupplicate }} </p> <!--- you can use many filters --->
+            </div>
+            new Vue({
+                el: ".app",
+                data:{
+                    name: "abdullrahman"
+                },
+                filters:{
+                    upperCase(value){
+                        return value.toUpperCase() ;
+                    },
+                    dupplicate(value){
+                        return value + " " + value;
+                    }
+                }
+            })
+
+        - we can make global filters to use it in any vue instance
+
+        example: Global filter in Vue.js 
+        ---------------------------------
+            <div class="app">
+                <p> {{ name | lowerCase }} </p>
+            </div>
+            Vue.filter('lowerCase' , function(value){
+                return value.toLowerCase();
+            })
+            new Vue({
+                el: ".app",
+                data:{
+                    name: "ABDULLRAHMAN"
+                },
+            })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (21) mixins in Vue.js 
+    =================================
+        !!!! used to create group of codes can use in many vue instance !!!
+        
+        - values in component is important than in mixins
+
+        example: write old component code 
+        ---------------------------------
+            <div class="app">
+                <component1></component1>
+                <component2></component2>
+            </div>
+            Vue.component("component1",{
+				template: '<p> {{ name }} </p>',
+				data() {
+					return {
+						name: "Ahmed"
+					}
+				},
+			})		
+			Vue.component("component2",{
+				template: '<p> {{ name }} </p>',
+				data() {
+					return {
+						name: "Abdullrahman"
+					}
+				},
+			})		
+            new Vue({
+                el: ".app",
+            })
+
+
+        example: write component code with mixins 
+        ------------------------------------------
+            <div class="app">
+                <component1>  </component1>
+                <component2>  </component2>
+            </div>
+			var mixinsVar = {
+				template: '<p> {{ name }} </p>',
+			}
+			Vue.component("component1",{
+				mixins: [mixinsVar],
+				data() {
+					return {
+						name: "Ahmed"
+					}
+				},
+			})		
+			Vue.component("component2",{
+				mixins: [mixinsVar],
+				data() {
+					return {
+						name: "Abdullrahman"
+					}
+				},
+			})		
+            new Vue({
+                el: ".app",
+            })
+
+
+
+        example: create global mixins in all components 
+        ---------------------------------------------------
+            <div class="app">
+                <component1>  </component1>
+                <component2>  </component2>
+            </div>
+            Vue.mixin({        //  global mixins not prefer template
+				data() {
+					return {
+						name: "Abdullrahman"
+					}
+				},
+			})
+			Vue.component("component1",{
+				template: '<p> {{ name }} </p>',
+				
+			})		
+			Vue.component("component2",{
+				template: '<p> {{ name }} </p>',
+				
+			})		
+            new Vue({
+                el: ".app",
+            })
+
+
+
+        - note that code in component is important than in mixins and mixins code is default  ,
+        example: 
+        -------------
+            <div class="app">
+                <component1></component1>
+            </div>
+            Vue.mixin({
+                data() {
+                    return {
+                        name: "Abdullrahman"
+                    }
+                },
+            })
+            Vue.component("component1",{
+                template: '<p> {{ name }} </p>',
+                data() {
+                    return {
+                        name: "ahmed"
+                    }
+                },
+            })		
+            new Vue({
+                el: ".app",
+            })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (22) install vue CLI in window 
+    =================================
+    
+
+        1- install Vue CLI 
+        -----------------------
+            - Docs (https://cli.vuejs.org)
+
+            - you must have node in system , download it (https://nodejs.org/en/download/) ,
+                to check use this command ==>  node -v
+
+            - you must have Vue CLI in system , download it use this command ==> ( npm install -g @vue/cli ) ,
+                to check use this command ==>  vue --version
+
+
+
+        2- create project 
+        --------------------
+
+            - Command line
+            ---------------------
+                use this command ==> vue create hello-world
+
+
+            - Using the GUI
+            ------------------
+                You can also create and manage projects using a graphical ,
+                 interface with the vue ui use this command ==> vue ui
+
+
+
+        3-Compiles and hot-reloads
+        ---------------------------------------
+            - for Compiles and hot-reloads "live server" for development ,
+                use this command ==> npm run serve
+
+
+
+        4- Compiles and minifies for production
+        --------------------------------------
+            - for Compiles and minifies for production ,
+                use this command ==> npm run build
+
+
+
+
+
+        5- component Shape
+        -----------------------
+
+            <template>  // is required and must have one element 
+            </template>
+            <script>    // is optional , to write js code put if empty export default {}
+            </script>
+            <style scoped > Add "scoped" attribute to limit CSS to this component only 
+            </style>
+
+
+        6- simple components using vue cli 
+        ---------------------------------------
+
+            in app.vue ==>
+                <template>
+                    <helloWorld />
+                </template>
+                <script>
+                    import helloWorld from './components/HelloWorld'
+                    export default {
+                        name: "app",
+                        components:{
+                            helloWorld
+                        }
+                    }
+                </script>
+
+            in HelloWorld.vue ==>
+                <template>
+                    <div class="hello-world">
+                        hello-world
+                    </div>
+                </template>
+                <script>
+                    export default {
+                        name: "HelloWorld"
+                    }
+                </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (23) Vue Router 
+    ===================
+ 
+
+
+ 
+        1- installation
+        --------------------
+
+            - npm 
+            -------
+                use this command ==> npm install vue-router
+
+            - Include CDN 
+            --------------
+                <script src="/path/to/vue.js"></script>
+                <script src="/path/to/vue-router.js"></script>
+
+
+
+
+
+        2- simple example using vue router
+        ----------------------------------------
+
+            - create 2 component .vue in components folder ( Home , Contact )
+
+            - in Home.vue component ==>
+                <template>
+                    <h1> Welcome Home Page</h1>
+                </template>
+
+            - in Contact.vue component ==>
+                <template>
+                    <h1> Welcome Contact Page</h1>
+                </template>
+
+            - in App.vue ==>   
+                <template>
+                    <div>
+                        <router-view></router-view> <!--- toggle component here--->
+                    </div>
+                </template>
+
+            - in main.js  ==>   
+                import VueRouter from 'vue-router'
+                Vue.use(VueRouter)
+                import Home    from './components/Home.vue'
+                import Contact from './components/Contact.vue'
+                const router = new VueRouter({
+                    routes:[
+                        { path: '/' , component: Home },
+                        { path: '/contact' , component: Contact },
+                    ]
+                })
+
+
+
+
+
+
+        3- remove History mode from links
+        ----------------------------------------
+            - The default mode for vue-router is hash mode , and 
+                there is 2 steps to remove '#' 
+
+            - first in main.js ==> // add 
+                const router = new VueRouter({
+                    mode: 'history',
+                    routes: [...]
+                })
+
+            - second "vue rewrite history" so visit link ( https://router.vuejs.org/guide/essentials/history-mode.html#example-server-configurations ) ,
+                and edit Apache file in cpanal to direct home page if user bookmark
+                link because it will git error
+                
+
+                
+
+                
+
+
+
+        4- style links with bootstrap
+        -------------------------------
+            - attr => active-class="active" mean add class active in acive route , 
+                exact => mean if url == to="/" 
+
+            - in app.vue ==>
+                <template>
+                    <div>
+                        <div class="navbar">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item">
+                                    <router-link class="nav-link" active-class="active" exact to="/">Home</router-link>  
+                                </li>
+                                <li class="nav-item">
+                                    <router-link class="nav-link"  active-class="active"  to="/about">About US</router-link>
+                                </li>
+                                <li class="nav-item">
+                                    <router-link class="nav-link"  active-class="active"  to="/contact">Contact</router-link>
+                                </li>
+                            </ul>
+                        </div>
+                        <router-view></router-view> 
+                    </div>
+                </template>
+
+
+
+
+        
+
+
+
+
+
+
+        5- create single file for routes
+        ----------------------------------
+
+            - in folder 'src' create 'routes.js' this file for only routes
+
+            - in routes.js  ==>   
+                import Home    from './components/Home.vue'
+                import About   from './components/About.vue'
+                import Contact from './components/Contact.vue'
+                const routes = [
+                    { path: '/' , component: Home },
+                    { path: '/about' , component: About },
+                    { path: '/contact' , component: Contact },
+                ]
+                export default routes;
+
+            - in main.js  ==>   
+                import routes from './routes'
+                const router = new VueRouter({
+                    mode: "history",
+                    routes : routes   // OR only    routes 
+                })
+
+        
+
+
+
+
+
+
+
+
+        
+
+
+        6- dynamic routes
+        --------------------
+
+            - for example ( posts/1 , offers/1 , products/1 ) 
+
+            1- in routes.js file ==>
+                import PostPage from './components/PostPage.vue'
+                const routes = [
+                    { path: '/posts/:id' , component: PostPage }, // :id mean that id is dynamic 
+                ]
+
+            2- create component PostPage.vue ==>
+                <template>
+                    <h3> Post Number {{id}}  </h3>
+                </template>
+                <script>
+                export default {
+                    data(){
+                        return{
+                            id: this.$route.params.id   // you can console.log 'this.$route' object to peek 'id' 
+                        }
+                    }
+                }
+                </script>
+
+
+
+
+
+        
+
+        7- update data with dymanic route in same page
+        -------------------------------------------
+
+            if you change route in same page and get it page , there is 2 ways to 
+                update data with route 
+
+            - in PostPage.vue ==> 
+                <template>
+                    <div>
+                        <h3> Post Number {{id}}  </h3>
+                        <ul>  <!---- many urls can toggle them --->
+                            <li> <router-link to="1">post 1</router-link>  </li>
+                            <li> <router-link to="2">post 2</router-link>  </li>
+                            <li> <router-link to="3">post 3</router-link>  </li>
+                            <li> <router-link to="4">post 4</router-link>  </li>
+                        </ul>
+                    </div>
+                </template>
+                <script>
+                    export default {
+                        data(){
+                            return{
+                                id: this.$route.params.id
+                            }
+                        },
+                        watch: {
+                            $route: function() {  // watch $route if any changes
+                                this.getPost();
+                            }
+                        },
+                    }
+                </script>
+
+            /// OR 
+
+            - in routes.js file ==>
+                const routes = [
+                    { path: '/posts/:id' , component: PostPage , props: true }, // mean pass id in props for any changes
+                ]
+
+            - in PostPage.vue file ==>
+                <template>
+                    <div>
+                        <h3> Post Number {{id}}  </h3>
+                        <ul>
+                            <li> <router-link to="1">post 1</router-link>  </li>
+                            <li> <router-link to="2">post 2</router-link>  </li>
+                            <li> <router-link to="3">post 3</router-link>  </li>
+                            <li> <router-link to="4">post 4</router-link>  </li>
+                        </ul>
+                    </div>
+                </template>
+                <script>
+                    export default {
+                        props: ["id"]  // pass it in props not data because data load only one time at load component
+                    }
+                </script>
+
+
+
+
+
+        8- nested Routes
+        ---------------------
+
+            - if we have users page and want to go view user 'users/1' we must use 
+                nested routed using 'childern' , we must create best strachter so create 
+                folder 'users' in 'component' folder  
+
+            - in main.js ==> 
+                /* ====================== Users Component ====================== */
+                import UsersPage from './components/UsersPage.vue'
+                import UsersHomePage from './components/users/UsersHomePage.vue'
+                import UserViewPage from './components/users/UserViewPage.vue'
+                /* ====================== Users Routes ====================== */
+                const routes = [
+                    { path: '/users' , component: UsersPage , children: [
+                        { path: '' , component: UsersHomePage } ,
+                        { path: ':id' , component: UserViewPage , props: true },
+                    ]}
+                ]
+
+            - in UsersPage.vue ==> 
+                <template>
+                    <div>
+                        <router-view></router-view> <!----for toggle between childern Components--->
+                    </div>
+                </template>
+
+            - in UsersHomePage.vue ==> 
+                <template>
+                    <div>
+                        Welcome Users Home Page
+                        <div>
+                            <ul>
+                                <li> <router-link to="/users/1">User 1</router-link>  </li>
+                                <li> <router-link to="/users/2">User 2</router-link>  </li>
+                                <li> <router-link to="/users/3">User 3</router-link>  </li>
+                                <li> <router-link to="/users/4">User 4</router-link>  </li>
+                            </ul>
+                        </div>
+                </div>
+                </template>
+
+            - in UserViewPage.vue ==> 
+                <template>
+                    <div>
+                        Hi User Number {{id}} 
+                    </div>
+                </template>
+                <script>
+                    export default {
+                        props: ["id"]
+                    }
+                </script>
+
+
+
+
+
+
+
+        9- named routes
+        -----------------
+            - we can give url name to use it in any components with it name 
+                , many of framWorks use this feature like "laravel FramWork" 
+
+
+
+            - in routes.js ==>
+                const routes = [
+                    { path: '/users' , component: UsersPage , children: [
+                        { path: '' , component: UsersHomePage , name: 'usersHome' } ,
+                        { path: ':id' , component: UserViewPage , props: true , name: 'userView'},
+                    ]}
+                ]
+
+            - in about.vue ==>
+                <template>
+    
+                    <div>
+                        <h3> About US Page  </h3>
+                        <ul>
+                            <li> <router-link :to="{name: 'usersHome'}"> users  </router-link>  </li>
+                            <li> <router-link :to="{name: 'userView' , params: { id: 2 } }"> View User 2  </router-link>  </li>
+                        </ul>
+                    </div>
+
+                </template>
+                
+
+
+
+
+
+
+        10- Programatic Navigation 
+        -----------------------------
+            - vivist link (https://router.vuejs.org/guide/essentials/navigation.html)
+
+            - Aside from using <router-link> to create anchor tags for declarative navigation
+                , we can do this programmatically using the router's instance methods().
+
+            - for example create button at click header me to home page after 1 sec
+
+            - in Home.vue ==>
+                <template>
+                    <div>
+                        <h3> Welcome Home Page</h3>
+                        <button @click="goToAbout"> Go To About Page in 2 sec </button>
+                    </div>
+                </template>
+                <script>
+                export default {
+                    methods:{
+                        goToAbout(){
+                            const self = this  
+                            setTimeout( function(){
+                                self.$router.push("/about") // we cant use this.$router beacuse this return setTimeout not methods
+                                //OR
+                                self.$router.push({ path: '/about'}) 
+                            } , 2000)
+                        }
+                    }
+                }
+                </script>
+
+
+
+
+
+
+        
+        11-  Query Params
+        ----------------------
+            - Query string like ( users/2?id=213&postCode=25235 ) 
+
+            - Add/set it in links ==>
+                <template>
+                    <div>
+                        <ul>
+                            <li> <router-link :to="{name: 'userView' , params: { id: 2 } , query:{ id: 213 , postCode: 25235 } }"> user 1  </router-link>  </li>
+                        </ul>
+                    </div>
+                </template>
+                
+            - Get in component ==>
+                <template>
+                    <div>
+                        Query Params: <br/>
+                        ID :{{ $route.query.id }}  <br/>
+                        Postel Code :{{ $route.query.postCode }}  <br/>
+                    </div>
+                </template>
+
+
+
+
+        
+
+
+
+
+        12-  Catch All
+        ----------------------
+            - at visiting url not found
+            
+            - in routes.js ==>
+                import NotFound from './components/NotFound.vue'
+                const routes = [
+                    { path: '*' , component: NotFound  }, 
+                ]
+
+            - in NotFound.vue ==>
+                <template>
+                <h1> Error 404 Not Found</h1>
+                </template>
+                        
+
+
+
+
+
+
+        13- Route Guards
+        ----------------------
+            ( https://router.vuejs.org/guide/advanced/navigation-guards.html#global-after-hooks )
+
+            - Route Guards is used to make guards tools in links , we can use Route Guards in routes or 
+                in component page or in main component App.vue to create global guards 
+
+
+            - in route's configuration ==>
+                const routes = [
+                    { path: '/about' , component: About , beforeEnter: (to, from, next) => {
+                        console.log("Home beforeEnter");
+                        // next(false)  // next(false) , next('')  ==> stop go to any url  
+                        next('/contact') // we can put go to it any way
+                    }},
+                ]
+
+            - In Component Guards ( beforeRouteEnter , beforeRouteUpdate , beforeRouteLeave )
+                for example in About.vue ==> 
+                <template>
+                    <h3> Welcome About Us Page</h3>
+                </template>
+                <script>
+                export default {
+                    beforeRouteEnter(to , from , next){
+                        console.log("Home beforeEnter");
+                        next('/contact') 
+                    }
+                }
+                </script>
+
+
+
+
+
+
+        
+
+
+
+
+
+        14- Scroll Behavior
+        -------------------
+            ( https://router.vuejs.org/guide/advanced/scroll-behavior.html#async-scrolling )
+
+            - mean at click router link vuejs go top page 
+
+
+            -    const router = new VueRouter({
+                    routes: [...],
+                    scrollBehavior (to, from, savedPosition) {
+                        return { x: 0, y: 0 }
+                    }
+                })
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+    (23) VueX 
+    ==============
+
+        ( https://vuex.vuejs.org/ )
+        - Vuex is a 'state management' pattern + library for Vue.js applications.
+            It serves as a centralized store for all the components in an application
+
+        - it used instead of using $emit to pass data in components 
+
+    
+        1- installation 
+        -----------------
+
+            Direct Download / CDN
+            -------------------------
+                <script src="/path/to/vue.js"></script>
+                <script src="/path/to/vuex.js"></script>
+
+            NPM
+            -----
+                run this command ==> npm install vuex --save
+
+            Yarn
+            -----
+                run this command ==> yarn add vuex
+
+
+
+
+
+        2- Getting Started 
+        -----------------
+            - After installing Vuex, let's create a store/store.js ==> 
+                import Vue from 'vue'
+                import Vuex from 'vuex'
+                Vue.use(Vuex)
+                const store = new Vuex.Store({
+                    state: {
+                        
+                    },
+                    mutations: {
+                        
+                    }
+                })
+                export default store ; // to use it in component 'this.$store'
+
+            - In order to have an access to 'this.$store' property in your Vue components
+                ,you need to provide the created store to Vue instance in main.js ==>
+                    import store from './store/store'
+                    new Vue({
+                        el: '#app',
+                        store: store,  // or only store in es6
+                    })
+
+
+        3- State in Vuex
+        --------------------
+            - state in like data in component , to get/use vuex state into Vue Components 
+                we must returning some  store state from within a computed property
+            
+            - example: using State 
+            --------------------------
+
+                - in store.vue ==> 
+                    const store = new Vuex.Store({
+                        state: {
+                            counter: 0
+                        },
+                    })
+                - in component.js ==>
+                    export default {
+                        computed:{
+                            counter(){
+                                return this.$store.state.searchVal
+                            }
+                        },
+                    }
+
+
+            - The mapState Helper
+            ---------------------
+                - mapGetters helper simply maps store getters to local computed properties , 
+                    to shortcut code and use getters with same getters opration 
+
+                 - in store.vue ==> 
+                    const store = new Vuex.Store({
+                        state: {
+                            counter: 0
+                        },
+                    })
+                - in component.js ==>
+                    import { mapState } from 'vuex'
+                    export default {
+                        computed:{
+                            ...mapState([ 'counter' ])
+                        },
+                    }
+        
+        4- Getter in Vuex
+        ---------------------
+            - getter is used to do opration/methods with stats values
+            - to make filter operations in state
+
+            - example: using Getters 
+            --------------------------
+                - in store.js ==>
+                    const store = new Vuex.Store({
+                        state: {
+                            counter: 0
+                        },
+                        getters: {
+                            doubledCounterVal(state){
+                                return state.counter * 2  
+                            }
+                        }
+                    })
+                - in component.vue ==> 
+                    export default {
+                        computed:{
+                            counter(){
+                                return this.$store.state.counter
+                            },
+                            doubledCounterVal(){
+                                return this.$store.getters.doubledCounterVal // with or without ()
+                            }
+                        },
+                    }
+
+            - example: Getters with params 
+            --------------------------------
+
+                 - in store.js ==>
+                    const store = new Vuex.Store({
+                        state: {
+                            counter: 0
+                        },
+                        getters: {
+                            multiCounter: (state)  =>  (multi) => {
+                                return state.counter * multi  
+                            }
+                        }
+                    })
+                - in component.vue ==> 
+                    export default {
+                        computed:{
+                            counter(){
+                                return this.$store.state.counter
+                            },
+                            multiCounter(){
+                                return this.$store.getters.multiCounter(5) 
+                            }
+                        },
+                    }
+
+            - The mapGetters Helper 
+            --------------------------------
+                - mapGetters helper simply maps store getters to local computed properties , 
+                    to shortcut code and use getters with same getters opration 
+                - mapGetters can't use with getters using params
+
+                example: mapGetters 
+                --------------------
+                    - in store.js ==>
+                        const store = new Vuex.Store({
+                            state: {
+                                counter: 0
+                            },
+                            getters: {
+                                doubledCounterVal(state){
+                                    return state.counter * 2  
+                                }
+                            }
+                        })
+                    - in component.vue ==> 
+                        import { mapGetters } from 'vuex'
+                        export default {
+                            ...mapGetters([ 'doubledCounterVal' ]) , // this '...' mean to turn object in mapGetters to object in computed as key & value
+                        }
+
+                example: mapGetters with different name
+                -----------------------------------------
+                    ...mapGetters({
+                        doubledCounterVal: 'doubledCounter'   // map `this.doubledCounterVal` to `this.$store.getters.doubledCounter`
+                    })
+        
+
+
+
+
+
+        
+        5- mutations in Vuex
+        -------------------------
+            - mutations is look like getter but getter to make opration in state in store.js 
+                but mutations to make opration in state in vue component
+            - mutations for edition but getters for getting oprarions from store.js
+            - mutations is used in methods in vue instance in component
+
+
+            - example: using mutations 
+            --------------------------
+                in store.js ==> 
+                    const store = new Vuex.Store({
+                        state: {
+                            counter: 0
+                        },
+                        mutations:{
+                            increase(state){
+                                return state.counter ++  
+                            },
+                            decrease(state){
+                                return state.counter -- 
+                            },
+                        }
+                    })
+                - in component.vue ==>
+                    <template>
+                        <div>
+                            <h2>Counter</h2>
+                            Counter: {{counter}}
+                            <button @click="increase">Increase</button>
+                            <button @click="decrease">Decrease</button>
+                        </div>
+                    </template>
+                    <script>
+                        export default {
+                            computed:{
+                                counter(){
+                                    return this.$store.state.counter
+                                },
+                            },
+                            methods: {
+                                increase (){
+                                    return this.$store.commit("increase")
+                                },
+                                decrease (){
+                                    return this.$store.commit("decrease")
+                                }
+                            }
+                        }
+                    </script>
+
+
+
+            - example: mutations with params 
+            -------------------------------------
+                - in store.js ==> 
+                    const store = new Vuex.Store({
+                        state: {
+                            counter: 0
+                        },
+                        mutations:{
+                            n_increase(state , n){
+                                return state.counter += n
+                            }
+                        }
+                    })
+                - in component.vue ==> 
+                    <template>
+                        <div>
+                            <h2>Counter</h2>
+                            Counter: {{counter}}
+
+                            <button @click="n_increase">Increase+5</button>
+                        </div>
+                    </template>
+                    <script>
+                        export default {
+                            computed:{
+                                counter(){
+                                    return this.$store.state.counter
+                                },
+                            },
+                            methods: {
+                                n_increase (){
+                                    return this.$store.commit("n_increase" , 5)
+                                }
+                            }
+                        }
+                    </script>
+
+            - example: mutations with params (advanced)
+            -------------------------------------
+                - mutations with params as object using 'payload' 
+                - in store.js ==> 
+                    const store = new Vuex.Store({
+                        state: {
+                            counter: 0
+                        },
+                        mutations:{
+                            n_increase(state , payload){
+                                return state.counter += payload.amount
+                            }
+                        }
+                    })
+                - in component.vue ==> 
+                    <template>
+                        <div>
+                            <h2>Counter</h2>
+                            Counter: {{counter}}
+
+                            <button @click="n_increase">Increase+5</button>
+                        </div>
+                    </template>
+                    <script>
+                        export default {
+                            computed:{
+                                counter(){
+                                    return this.$store.state.counter
+                                },
+                            },
+                            methods: {
+                                return this.$store.commit("n_increase" , {
+                                    amount: 5
+                                })
+                            }
+                        }
+                    </script>
+
+
+
+
+            - example: mutations to change state value
+            ----------------------------------------------
+                - in store.js ==> 
+                    const store = new Vuex.Store({
+                        strict: true,
+                        state: {
+                            searchVal: ""
+                        },
+                        mutations: {
+                            updateSearchVal (state, queryVal) {
+                                state.searchVal = queryVal
+                            }
+                        }
+                    })
+                - in component.vue ==>
+                    <span class="icon fa fa-search" @click.prevent="searchNow"></span>
+                    methods:{
+                        searchNow(){
+                            this.$store.commit('updateSearchVal', this.queryVal) // edit 
+                        }
+                    } 
+                    
+
+
+            - The mapMutations Helper 
+            ---------------------------------
+
+                example: mapMutations 
+                --------------------
+
+                    - in store.js ==> 
+                        const store = new Vuex.Store({
+                            state: {
+                                counter: 0
+                            },
+                            mutations:{
+                                increase(state){
+                                    return state.counter ++  
+                                },
+                                decrease(state){
+                                    return state.counter -- 
+                                },
+                            }
+                        })
+                    - in component.vue ==>
+                        <template>
+                            <div>
+                                <h2>Counter</h2>
+                                Counter: {{counter}}
+                                <button @click="increase">Increase</button>
+                                <button @click="decrease">Decrease</button>
+                            </div>
+                        </template>
+                        <script>
+                            export default {
+                                computed:{
+                                    counter(){
+                                        return this.$store.state.counter
+                                    },
+                                },
+                                methods: {
+                                    ...mapMutations(["increase" , "decrease" ]) ,
+                                }
+                            }
+                        </script>
+
+            
+
+
+
+
+
+        
+
+        6- Actions in Vuex
+        ---------------------
+            - Actions are similar to mutations, the differences being that:
+                + Instead of mutating the state, actions commit mutations.
+                + Actions can contain arbitrary asynchronous operations.
+            - Actions use to edit mutations after sec or get requests from ajax for example
+        
+
+            - example: using Actions 
+            ---------------------------
+                - in store.js ==> 
+                    const store = new Vuex.Store({
+                        state: {
+                            counter: 0
+                        },
+                        mutations:{
+                            increase(state){
+                                return state.counter ++  
+                            },
+                        },
+                        actions:{
+                            increaseAfter3Sec( context ){ // if you will only commit you can use { commit } in param and then ==> commit("increase")
+                                setTimeout(function (){
+                                    context.commit("increase") // run mutaions "increase" after 1 sec
+                                }, 3000)
+                            }
+                        }
+                    })
+                - in component.vue ==>
+                    <template>
+                        <div>
+                            <h2>Counter</h2>
+                            Counter: {{counter}}
+                            <br>
+                            <button @click="increase">Increase</button>
+                            <br>
+                            <button @click="increaseAfter3Sec">increase After 3 Second</button>
+                        </div>
+                    </template>
+
+                    <script>
+                        import { mapMutations } from 'vuex'
+                        export default {
+                            computed:{
+                                counter(){
+                                    return this.$store.state.counter
+                                },
+                            },
+                            methods: {
+                                ...mapMutations(["increase" ]) ,
+                                increaseAfter3Sec(){
+                                    return this.$store.dispatch("increaseAfter3Sec")
+                                }
+                            }
+                        }
+                    </script>
+
+
+        
+
+
+
+
+
+
+
+
+        7- Modules in Vuex
+        ---------------------
+
+
+
+        
+
+
+
+
+
+        
+
+        8- examples with vuex
+        ---------------------
+            
+            - Using v-model with vuex to Edit Value
+            -----------------------------------------
+                in store.js
+                --------------
+                    const store = new Vuex.Store({
+                        strict: true,
+                        state: {
+                            searchVal: "This Val From Store.js"
+                        },
+                        mutations: {
+                            updateSearchVal (state, searchVal) {
+                            state.searchVal = searchVal
+                            }
+                        }
+                    })
+
+                in component.vue
+                ------------------
+                    <input :value="searchVal" @input="updateSearchVal">
+                    export default {
+                        computed: {
+                            searchVal: function() {
+                                return this.$store.state.searchVal;
+                            }
+                        },
+                        methods:{
+                            updateSearchVal (e) {
+                                this.$store.commit('updateSearchVal', e.target.value)
+                            }
+                        } 
+                    }
+
+                // OR 
+
+                in store.js
+                --------------
+                    const store = new Vuex.Store({
+                        strict: true,
+                        state: {
+                            searchVal: "This Val From Store.js"
+                        },
+                        mutations: {
+                            updateSearchVal (state, searchVal) {
+                                state.searchVal = searchVal
+                            }
+                        }
+                    })
+
+                in component.vue
+                ------------------
+                    <input  v-model="searchVal">
+                    export default {
+                        computed: {
+                            searchVal: {
+                                get () {
+                                    return this.$store.state.searchVal
+                                },
+                                set (value) {
+                                    this.$store.commit('updateSearchVal', value)
+                                }
+                            }
+                        }, 
+                    }
+
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+        
+
+
+
+
+
+
+
+    (24) Simple Practises with Vue.js
+    =====================================
+
+
+        1- Live form validation 
+        -------------------------
+            !!!! Live form validation in register component !!!!
+
+            <template>
+                <form action="" method="post" nonvalidate >
+                    <h2 class="text-center">Create New Account</h2>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Type First Name..."  v-model="firstName" >
+                        <small class="text-danger" v-if="firstNameErrors" > first name must be more 4 characters </small>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Type Last Name..."  v-model="lastName" >
+                        <small class="text-danger" v-if="lastNameErrors" > last name must be more 4 characters </small>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" placeholder="Type Email..."  v-model="email" >
+                        <small class="text-danger" v-if="emailErrors" > Email is not valid </small>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Type Password..."  v-model="password" >
+                        <small class="text-danger" v-if="passwordErrors" > password must be more 8 characters </small>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block" :disabled="!formIsValid" @click.prevent="submitRegister">
+                            Create Account
+                        </button>
+                    </div>
+                    <div class="clearfix">
+                        <a href="#" class="pull-right">Forgot Password?</a>
+                    </div>
+                </form>
+            </template>
+            <script>
+                export default {
+                    data(){
+                        return{
+                            firstName: '',  //  OR   firstName: null
+                            lastName:  '',
+                            email:   '',
+                            password:  '',
+                            regex : /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                        }
+                    }
+                    ,computed:{
+                        firstNameErrors(){
+                            return this.firstName.length > 0 &&  this.firstName.length < 4  // return false if 4 > lastName > 0
+                        },
+                        lastNameErrors(){
+                            return this.lastName.length > 0 &&  this.lastName.length < 4  // return false if 4 > lastName > 0
+                        },
+                        emailErrors(){
+                            return  !( this.regex.test( String(this.email) ) ) && this.email.length > 0
+                        },
+                        passwordErrors(){
+                            return this.password.length > 0 &&  this.password.length < 8
+                        },
+                        formIsValid(){
+                            return  this.firstName.length > 4 &&
+                                    this.lastName.length > 4  &&
+                                    this.password.length > 4  &&
+                                    this.regex.test( String(this.email) ) 
+                        }
+                    },methods:{
+                        submitRegister(){
+                            alert("Form Submitted");
+                        },
+                    }
+                }
+            </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        2- Vue OwlCarousel 
+        -------------------------
+
+
+
+
+
+
+
+
+
+
+        3- Laravel Vue Pagination 
+        -------------------------
+            ( https://github.com/gilbitron/laravel-vue-pagination )
+
+            install
+            ---------
+                npm install laravel-vue-pagination
+                // OR
+                yarn add laravel-vue-pagination
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (25) Pass laravel CSRF token value to vue
+    ==============================================
+
+
+

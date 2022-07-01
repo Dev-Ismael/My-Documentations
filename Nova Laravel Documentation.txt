@@ -1,0 +1,66 @@
+
+My Documentation For Nova Laravel :   
+---------------------------------------
+
+
+
+
+    
+    (1)  Installing Nova
+    ===========================
+    
+        (#) Download nova & add to laravel project 
+        -----------------------------------------------
+            
+            - Create nova folder in laravel project and paste all nova content at project
+
+            - update your composer.json file. You should add the following configuration to the file:
+            "require": {
+                    "php": "^8.0.2",
+                    "guzzlehttp/guzzle": "^7.2",
+                    "laravel/framework": "^9.2",
+                    "laravel/sanctum": "^2.14.1",
+                    "laravel/tinker": "^2.7",
+                    "laravel/nova": "*"
+                },
+                "repositories": [
+                    {
+                        "type": "path",   // depend on path on project
+                        "url": "./nova"   // mean nova folder
+                    }
+                ],
+            
+            - After your composer.json file has been updated,
+                run the composer update command in your console terminal:
+                ==> composer update
+
+            - create database 'nova_laravel' in Mysql and edit DB_DATABASE at .env file  
+
+            - Finally, run the nova:install and migrate Artisan commands
+                ==> php artisan nova:install
+                ==> php artisan migrate
+
+            - If you don't have a Nova admin user yet in your users table,
+                you can add one by running the nova:user Artisan command :
+                ==> php artisan nova:user
+
+
+
+        (#) Clone repo (Nova-Laravel) 
+        -----------------------------------------------
+
+            - Run command 
+                ==> git clone https://github.com/Dev-Ismael/Nova-Laravel
+
+            - run the composer update command in your console terminal:
+                ==> composer update
+
+            - create database 'nova_laravel' in Mysql and edit DB_DATABASE at .env file  
+
+            - Finally, run the nova:install and migrate Artisan commands
+                ==> php artisan nova:install
+                ==> php artisan migrate
+
+            - If you don't have a Nova admin user yet in your users table,
+                you can add one by running the nova:user Artisan command :
+                ==> php artisan nova:user

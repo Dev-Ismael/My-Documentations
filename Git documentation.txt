@@ -1,0 +1,165 @@
+My Documentation For Git :   (  https://github.com/ ) 
+----------------------------
+
+
+    (1) create new repository in Git
+    ----------------------------------------
+        - login in site , to create new repository visit this
+            link ( https://github.com/new )        
+
+
+
+
+
+
+
+
+
+
+    (2) For create a new repository on the command line
+    ----------------------------------------------------
+
+        !!!!! at first check that you ont have git folder in project !!!!!
+
+        ==> echo "# very-simple-Crud-SPA" >> README.md
+        ==> git init    // create git folder and setup project for upload and ignor .gitignor
+        ==> git add .   // . ==> mean add all project 
+        ==> git commit -m "first commit"  // what is first commit name { comment }
+        ==> git remote add origin https://github.com/Abdullrahman22/...........         // link of this repository
+        ==> git push -u origin master  // upload now
+ 
+
+
+
+
+
+
+
+
+
+
+    (3) For create versions (commit) for project
+    ----------------------------------------------------
+        ==> git add .
+        ==> git commit -m "new edition"
+        ==> git push -u origin master
+
+
+
+
+
+
+
+
+
+
+
+    (4) get colne in my PC
+    ---------------------------
+        ==> git clone https://github.com/Abdullrahman22/basic-laravel-vue-blog.git
+
+
+
+
+
+
+
+
+
+
+
+    (5) link git with cPanal  
+    ------------------------------------------------------
+        ==>  cd  share4cash.club
+        ==>  git init  // to download git folder
+        ==>  git remote add origin https://github.com/Abdullrahman22/portfolio-website    // to link cPanal with project 
+        ==>  git pull origin master    // branches ==> git pull origin laravel_bloomfield
+        
+
+
+
+
+
+
+
+
+
+
+    (6) set account info in CLI  
+    ------------------------------------------------------
+        git config --global user.email "dev.ismael305@gmail.com"
+        git config --global user.name "Abdullrahman22"
+        git config --global user.password "ismael679"
+
+
+
+
+
+
+
+
+
+
+    (7) get all commits 
+    ------------------------------------------------------
+        ==> git log --oneline
+
+
+
+
+
+
+
+
+
+    (8) SWITCHED TO ANOTHER BRANCH 
+    ------------------------------------------------------
+        ==>  $ git checkout -b [name_of_your_new_branch] 
+
+
+
+
+
+
+    (8) CREATE NEW BRANCH 
+    ------------------------------------------------------
+        ==>  $ git pull                 // Before creating a new branch, pull the changes from upstream. Your master needs to be up to date.
+        ==>  $ git checkout -b [name_of_your_new_branch]          // Create the branch on your local machine and switch in this branch :
+        ==>  $ git push origin [name_of_your_new_branch]          // Push the branch on github 
+
+
+
+
+
+
+    (8) CLONE SPECFIED GIT 
+    ------------------------------------------------------
+        ==> $ git clone -b <branch> <remote_repo>            
+        ==> $ git clone -b my-branch git@github.com:user/myproject.git   //     EXAMPLE
+
+
+
+
+
+
+    (9) Edit at commit
+    ------------------------------------------------------
+        ==> 
+
+
+
+
+    (10) Error Can't be merge
+    ---------------------------------------------------
+        error: Your local changes to the following files would be overwritten by merge:
+        ==> git reset --hard  
+
+
+
+
+
+
+
+
+
+        

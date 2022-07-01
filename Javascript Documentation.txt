@@ -1,0 +1,359 @@
+
+My Documentation For Basics Javascript :   
+---------------------------------------
+
+
+
+
+
+
+    (1) output in Javascript 
+    =======================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (2) select element in Javascript
+    =======================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (3) count string 
+    ===================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (3) JavaScript if else and else if 
+    =======================================
+
+
+
+        example: at if Statement 
+        ---------------------------
+            if (time < 10) {
+                greeting = "Good morning";
+            } else if (time < 20) {
+                greeting = "Good day";
+            } else {
+                greeting = "Good evening";
+            }
+
+        * =============================================================== *
+        example: at if Statement (ES6) 
+        -----------------------------------
+
+
+
+        * =============================================================== *
+        example: at if Statement (ES6)   // if in one line
+        -----------------------------------
+            return time == 10 ;   // if( time == 10 ){ return true ;}
+
+
+
+        * =============================================================== *
+        example: at if Statement (ES6)  
+        --------------------------------
+            if( this.editingTodo.title == '' )    // if statement is one line we can put it without { }
+                this.destroyTodo( this.editingTodo );   
+
+            this.editingTodo = null               // this is not in statement  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (4) localStorage Javascript 
+    =======================================
+
+        - localStorage use to save data using in browser sessions , localStorage save
+            only strings and can't save object 
+
+        ==> localStorage.setItem('token', 'Tom');        // to set new value ==> setItem( name , value );
+
+        ==> var cat = localStorage.getItem('token');     // to get ==> getItem( name ) ;
+
+        ==> localStorage.removeItem('token');         // to remove item from localStorage
+
+        ==> localStorage.clear();                    // Clear all items
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (6) functions in JavaScript  
+    =======================================
+
+        - Basics function in js 
+        --------------------------
+            example: simple function 
+            --------------------------------
+                var hello = function alertNow() {  // we can use all funcs as hello()
+                    alert("Hello")
+                }
+                // OR
+                hello = function() {   
+                    alert("Hello")
+                }
+
+            example:  function with params
+            --------------------------------
+                var hello = function alertNow(name) {
+                    alert("Hello " + name )
+                }
+
+
+        - Functions in ES6 
+        --------------------------
+            example: Arrow function 
+            ------------------------
+                hello = () => { 
+                    alert("Hello")
+                }
+                // OR 
+                hello = () => alert("Hello");
+                // OR
+                hello = () => "Hello";  // return Hello
+
+            example: Arrow function with params
+            --------------------------------
+                hello = (name) => { 
+                    alert("Hello " + name );
+                }
+                // OR
+                hello = (val) => "Hello " + val;  // use only with return
+                // OR 
+                hello = val => "Hello " + val;  // if you have only one parameter 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (5) var with many lines 
+    =======================================
+        !!! if we have var with many lines we can use one of 3 ways !!!
+
+        method 1
+        ------------
+            var = "Lorem Apsum Lorem Apsum Lorem Apsum Lorem Apsum Lorem Apsum Lorem Apsum "  +
+                    " Lorem Apsum Lorem Apsum Lorem Apsum Lorem Apsum Lorem Apsum  " +
+                    " Lorem Apsum  Lorem Apsum Lorem Apsum Lorem Apsum Lorem Apsum Lorem Apsum "
+
+        method 2
+        ------------
+            !!!!! not support in all browsers because its in javascript es6 !!!!
+            var = ` Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum 
+                    Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum 
+                    Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum `
+
+        method 3
+        -----------
+            var = " Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum \
+                    Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum \
+                    Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum  Lorem Apsum "
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (6) built in functions in JavaScript  
+    =======================================
+
+        1- splite 
+        ------------------------------
+            splite('/')        //   splite/part string every '/' to array
+
+
+
+        2- toUpperCase 
+        ------------------------------
+            var name = "abdullrahman"
+            alert( name.toUpperCase() ) // ABDULLRAHMAN
+
+
+
+        3- toLowerCase 
+        ------------------------------
+            var name = "ABDULLRAHMAN"
+            alert( name.toUpperCase() ) // abdullrahman
+
+
+        4- Extract characters from a string
+        -------------------------------------
+            var str = "Hello world!";
+            var res = str.substring(1, 4);
+
+            // OR
+            
+            var str = "Hello world!";
+            var res = str.slice(0, 5);
+
+
+
+
+
+
+
+    (7) create loop in part of array  
+    =======================================
+
+        var cars = ["BMW", "Volvo", "Saab", "Ford", "Fiat", "Audi"];
+        
+        for (i = 0  ; i < cars.slice(0, 3).length  ; i++) {
+            cars[i] + "<br>";
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

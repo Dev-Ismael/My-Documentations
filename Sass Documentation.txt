@@ -1,0 +1,392 @@
+My Documentation For Sass :   (  https://sass-lang.com ) 
+----------------------------
+
+
+
+
+
+
+
+    (1) Install and tools 
+    -----------------------
+        Downlaod cmder npm then run "npm install -g sass"
+            
+
+
+
+
+
+
+
+
+
+
+
+    (2) watch in sass :
+    ---------------------
+        sass --watch sass/file.scss:css/file.css
+        OR
+        download extentions for do it auto
+        if i dint want to compiled scss file put _ in file name
+
+
+
+
+
+
+
+
+
+
+
+
+    Output to css file :
+    ---------------------------
+        sass --watch sass/file.scss:css/file.css --style expanded              ( orginal style )
+        sass --watch sass/file.scss:css/file.css --style nested style option   ( nested )
+        sass --watch sass/file.scss:css/file.css --style compact               ( one line for props )
+        sass --watch sass/file.scss:css/file.css --style comperssed            ( comperssed )
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (3) syntax in sass :
+    ----------------------
+        .sass => 
+            .class
+                color : #000 ;
+
+        .scss => 
+            .class{
+                color : #000 ; 
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+    (4) vars in sass
+    -----------------------
+        start with $ like php 
+        ex:   $mainColor , $padding , $margin 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (5) nesting in sass
+    ---------------------
+        div{
+
+            box-shadow: 2px 2px 2px 2px #000 ;
+            width: 200px;
+            height: 100px;
+
+            &:hover{
+                background-color: #000
+            }
+
+            h2{
+                color: #000;
+                font-size: 24px; 
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+    (6) Math and opertors
+    ---------------------
+        $mainColor : 16px + 4;
+        $mainColor : 16px - 4;
+        $mainColor : 16px * 4;
+        $mainColor : 16px / 4;
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (7) extend
+    ---------------------
+        to include css props into another class
+        .big-font{
+            font-size: 50px;
+        }
+        p{
+            @extend .big-font ; 
+            color: red ;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (8) plceholder selector 
+    -------------------------
+        it like extend but it use only if i didnt to use main class in html
+        %big-font{
+            font-size: 50px;
+        }
+        p{
+            @extend %big-font ; 
+            color: red ;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (9) import in sass 
+    -------------------------
+        import mean to import file into file for more organized
+        ex =>
+            @import "file.css";
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (10) mixin in sass
+    -------------------------
+        mixin like function in php , js 
+        ex =>
+            @mixin bRadius( $r ){
+                -webkit-border-radius: $r ;
+                -moz-border-radius: $r ;
+                -o-border-radius: $r ;
+                -ms-border-radius: $r ;
+                border-radius: $r ;
+            }
+            div{
+                @include bRadius( 10px ) ;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (11) if conditions
+    -------------------------
+        ex=>
+            $direction : ltr ;
+            $floatLeft : left ;   
+            $floatRight : right ;   
+            if $direction == ltr {
+                $floatLeft : left ;   
+                $floatRight : right ;   
+            }else{
+                $floatLeft  : right ;   
+                $floatRight : left ;   
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+    (12) interpolation in sass  "concatenation"
+    --------------------------------------------
+        $size : size ; 
+        font-#{$size} : 16px
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (13) loop in sass
+    --------------------------------------------
+        @for $i from 1 through 16 {     1 - 16 times
+            .class#{$i}{
+                font-size: 24px ;
+            }
+        }
+
+
+        @for $i from 1 to 16 {     1 - 15 times
+            .class#{$i}{
+                font-size: 24px ;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+    (13) each in sass
+    --------------------------------------------
+        $socialList : facebook twitter youtube linkedin codepen instagram tiktok ; 
+        @each  $social in socialList {
+            .#{$social}-icon {
+                background-image: url("assets/img/#{social}.png") ;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    (13) each with multiple assignments 
+    --------------------------------------------
+        $socialList : facebook twitter youtube linkedin codepen instagram tiktok ; 
+        @each  $social , $color , $hover in socialList
+                ( facebook , red , green  )
+                ( twitter  , blue , pink  )
+                ( youtube  , green , black )
+                ( linkedin , pink , blue  )
+                ( codepen  , black , red  )
+        {
+            .#{$social}-icon {
+                background-image: url("assets/img/#{social}.png") ;
+                color: $color
+                &:hover{
+                    color: $hover
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+    (14) each with map  
+    --------------------------------------------
+        $myElements : ( h1 : 60px , h2 : 50px , h3 : 40px , h4 : 30px , h5 : 10px )
+        @each $element , $size in $myElements {
+            #{$element}{
+                font-size : #{$size};
+            }
+        }
+        
+
+
+
+
+
+
+
+
+
+
+
+
+    (15) functions
+    --------------------------------------------
+        like @mixin but functions for computing
+        ex => 
+            @function increaseFont( $ele ){
+                @return $ele + 20 ;
+            }
+            h2{
+                font-size: increaseFont( 5px )       // 25px
+            }
+
+

@@ -1,0 +1,17 @@
+Css Trickes :  
+----------------
+
+
+    # if text line is break show dots
+    ------------------------------- 
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+
+
+
+
+
+
+    # 
+    ------------------------------- 
