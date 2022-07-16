@@ -5421,6 +5421,25 @@ My Documentation For Laravel  :   (  https://laravel.com/docs )
 
 
 
+    (71) Laravel  LiveReload  with LaravelWix
+    ---------------------------------------------------------
+
+        - in file webpack.mix.js ==> 
+
+            mix.browserSync({
+                proxy: 'http://127.0.0.1:8000'
+            });
+
+        - Run this command :
+            ==> npm run watch
+
+
+
+
+
+
+
+
 
     !!!!!!!!!!! Dont forget go to php Anonymous for
     1- test validator types
